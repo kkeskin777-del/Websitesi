@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yönetim Paneli | KESKEEN DESIGN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;min-height:100vh;}
+.lbl{font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;}
+.btn-p{background:#1C1C1C;color:#fff;padding:.8rem 1.75rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-p:hover{opacity:.8;}
+.btn-o{background:transparent;color:#1C1C1C;padding:.75rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid #1C1C1C;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-o:hover{background:#1C1C1C;color:#fff;}
+.btn-danger{background:transparent;color:#ba1a1a;padding:.65rem 1.25rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #ba1a1a;cursor:pointer;transition:all .2s;}
+.btn-danger:hover{background:#ba1a1a;color:#fff;}
+.field{width:100%;padding:.75rem 1rem;border:1px solid #e3e2e0;background:#fff;font-family:'Manrope',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;color:#1C1C1C;}
+.field:focus{border-color:#1C1C1C;}
+.field-label{display:block;margin-bottom:.4rem;color:#444748;font-size:.62rem;}
+.card{background:#fff;border:1px solid #e3e2e0;padding:1.5rem;}
+.tab{padding:.75rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#747878;transition:all .2s;}
+.tab.active{color:#1C1C1C;border-bottom-color:#1C1C1C;}
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1C1C1C;color:#fff;padding:.875rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.82rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;display:flex;align-items:center;gap:.5rem;}
+/* Login screen */
+#loginScreen{position:fixed;inset:0;background:#faf9f7;z-index:9999;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
+<div id="loginScreen">
+  <div style="width:100%;max-width:400px;padding:2rem;">
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <a href="index.html" style="text-decoration:none;display:inline-block;">
+        <span style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:700;letter-spacing:-0.02em;color:#1C1C1C;display:block;">KESKEEN</span>
+        <span class="lbl" style="color:#747878;letter-spacing:.25em;font-size:.55rem;">DESIGN</span>
+      </a>
+      <p style="margin-top:1rem;color:#747878;font-size:.88rem;">Yönetim Paneli</p>
+    </div>
+    <div class="card" style="border-top:3px solid #1C1C1C;">
+      <p class="lbl" style="text-align:center;margin-bottom:1.5rem;color:#747878;font-size:.62rem;">Giriş Yapın</p>
+      <div style="margin-bottom:1rem;">
+        <label class="lbl field-label">Şifre</label>
+        <input type="password" id="loginPass" class="field" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')doLogin()"
+          style="letter-spacing:.2em;font-size:1.1rem;">
+      </div>
+      <p id="loginErr" style="color:#ba1a1a;font-size:.8rem;margin-bottom:.75rem;display:none;">Hatalı şifre. Tekrar deneyin.</p>
+      <button class="btn-p" onclick="doLogin()" style="width:100%;justify-content:center;">Giriş Yap</button>
+      <p style="text-align:center;margin-top:1rem;font-size:.72rem;color:#747878;">
+        Varsayılan şifre: <code style="background:#f4f3f1;padding:.1rem .4rem;font-size:.7rem;">keskeen2025</code>
+      </p>
+    </div>
+    <p style="text-align:center;margin-top:1.5rem;">
+      <a href="index.html" style="font-size:.75rem;color:#747878;text-decoration:underline;">← Siteye Dön</a>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════ ADMIN PANEL ══════════════════ -->
+<div id="adminPanel" style="display:none;">
+
+  <!-- Top Bar -->
+  <header style="background:#1C1C1C;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;">
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <a href="index.html" style="text-decoration:none;">
+        <span style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:-0.02em;">KESKEEN DESIGN</span>
+      </a>
+      <span class="lbl" style="color:#DFB947;font-size:.6rem;">YÖNETİM PANELİ</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="index.html" target="_blank" style="font-family:'Manrope',sans-serif;font-size:.7rem;color:rgba(255,255,255,.6);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.6)'">
+        Siteyi Gör ↗
+      </a>
+      <button onclick="doLogout()" style="background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:.5rem 1rem;font-family:'Manrope',sans-serif;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,.3)'">
+        Çıkış
+      </button>
+    </div>
+  </header>
+
+  <!-- Stats bar -->
+  <div style="background:#f4f3f1;border-bottom:1px solid #e3e2e0;padding:.75rem 2rem;">
+    <div style="display:flex;gap:2.5rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <span class="lbl" style="color:#747878;font-size:.58rem;">Toplam Ürün:</span>
+        <span id="statTotal" style="font-weight:700;font-size:.88rem;">0</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <span class="lbl" style="color:#747878;font-size:.58rem;">Stokta:</span>
+        <span id="statStok" style="font-weight:700;font-size:.88rem;color:#1a7a1a;">0</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <span class="lbl" style="color:#747878;font-size:.58rem;">Stok Yok:</span>
+        <span id="statYok" style="font-weight:700;font-size:.88rem;color:#ba1a1a;">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="border-bottom:1px solid #e3e2e0;padding:0 2rem;display:flex;gap:0;">
+    <button class="tab active" id="tab-urunler" onclick="switchTab('urunler')">Ürünler</button>
+    <button class="tab" id="tab-ekle" onclick="switchTab('ekle')">Yeni Ürün Ekle</button>
+    <button class="tab" id="tab-ayarlar" onclick="switchTab('ayarlar')">Site Ayarları</button>
+  </div>
+
+  <!-- Main content -->
+  <div style="max-width:1200px;margin:0 auto;padding:2rem;">
+
+    <!-- ══ ÜRÜNLER LİSTESİ ══ -->
+    <div id="tab-urunler-content">
+      <!-- Search & Filter -->
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+        <input type="text" id="listSearch" placeholder="Ürün ara..." onkeyup="filterList(this.value)"
+          style="padding:.6rem 1rem;border:1px solid #e3e2e0;background:#fff;outline:none;font-family:'Manrope',sans-serif;font-size:.85rem;min-width:240px;">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="listFilters">
+          <button onclick="filterListCat('')" class="lbl" data-cat="" style="padding:.4rem .9rem;border:1px solid #1C1C1C;background:#1C1C1C;color:#fff;cursor:pointer;font-size:.6rem;">Tüm Ürünler</button>
+          <button onclick="filterListCat('masalar')" class="lbl" data-cat="masalar" style="padding:.4rem .9rem;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:.6rem;color:#555;">Masalar</button>
+          <button onclick="filterListCat('raflar')" class="lbl" data-cat="raflar" style="padding:.4rem .9rem;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:.6rem;color:#555;">Raflar</button>
+          <button onclick="filterListCat('standlar')" class="lbl" data-cat="standlar" style="padding:.4rem .9rem;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:.6rem;color:#555;">Standlar</button>
+          <button onclick="filterListCat('aksesuarlar')" class="lbl" data-cat="aksesuarlar" style="padding:.4rem .9rem;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:.6rem;color:#555;">Aksesuarlar</button>
+        </div>
+        <button class="btn-p" onclick="switchTab('ekle');clearForm()">+ Yeni Ürün</button>
+      </div>
+
+      <div id="productTable"></div>
+    </div>
+
+    <!-- ══ YENİ ÜRÜN EKLE / DÜZENLE ══ -->
+    <div id="tab-ekle-content" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+        <h2 id="formTitle" style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:400;">Yeni Ürün Ekle</h2>
+        <button class="btn-o" onclick="clearForm();document.getElementById('formTitle').textContent='Yeni Ürün Ekle'">Formu Temizle</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start;">
+
+        <!-- Left: Form -->
+        <div class="card">
+          <input type="hidden" id="editId">
+
+          <div style="display:grid;gap:1.25rem;">
+            <!-- Ürün adı -->
+            <div>
+              <label class="lbl field-label">Ürün Adı *</label>
+              <input type="text" id="fIsim" class="field" placeholder="ör. Meşe Servis Tahtası">
+            </div>
+
+            <!-- Kategori -->
+            <div>
+              <label class="lbl field-label">Kategori *</label>
+              <select id="fKategori" class="field">
+                <option value="">Seçin...</option>
+                <option value="masalar">Masalar</option>
+                <option value="raflar">Raflar</option>
+                <option value="standlar">Standlar</option>
+                <option value="aksesuarlar">Aksesuarlar</option>
+              </select>
+            </div>
+
+            <!-- Fiyat -->
+            <div>
+              <label class="lbl field-label">Fiyat (₺) *</label>
+              <input type="number" id="fFiyat" class="field" placeholder="ör. 450" min="0" step="1">
+            </div>
+
+            <!-- Açıklama -->
+            <div>
+              <label class="lbl field-label">Açıklama *</label>
+              <textarea id="fAciklama" class="field" rows="4" placeholder="Ürün hakkında kısa bir açıklama girin..." style="resize:vertical;"></textarea>
+            </div>
+
+            <!-- Özellik etiketi -->
+            <div>
+              <label class="lbl field-label">Ürün Etiketi <span style="font-weight:400;text-transform:none;">(İsteğe Bağlı)</span></label>
+              <input type="text" id="fOzellik" class="field" placeholder="ör. Yeni Geldi, Öne Çıkan, Sınırlı Stok">
+              <p style="font-size:.72rem;color:#747878;margin-top:.35rem;">Ürün kartının üzerinde altın etiket olarak görünür.</p>
+            </div>
+
+            <!-- Stok -->
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <label class="lbl field-label" style="margin:0;">Stok Durumu</label>
+              <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;">
+                <input type="checkbox" id="fStok" checked style="width:18px;height:18px;accent-color:#1C1C1C;cursor:pointer;">
+                <span style="font-size:.85rem;">Stokta mevcut</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Image Upload -->
+        <div>
+          <div class="card" style="margin-bottom:1rem;">
+            <p class="lbl" style="margin-bottom:1rem;font-size:.65rem;">Ürün Görseli</p>
+
+            <!-- Tab between URL and Upload -->
+            <div style="display:flex;border-bottom:1px solid #e3e2e0;margin-bottom:1rem;">
+              <button id="imgTabUrl" onclick="switchImgTab('url')" style="flex:1;padding:.5rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid #1C1C1C;cursor:pointer;color:#1C1C1C;">URL Gir</button>
+              <button id="imgTabFile" onclick="switchImgTab('file')" style="flex:1;padding:.5rem;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#747878;">Dosya Yükle</button>
+            </div>
+
+            <!-- URL input -->
+            <div id="imgUrlSection">
+              <label class="lbl field-label">Görsel URL'si</label>
+              <input type="url" id="fGorselURL" class="field" placeholder="https://..." oninput="previewFromUrl(this.value)">
+              <p style="font-size:.7rem;color:#747878;margin-top:.4rem;line-height:1.5;">
+                Google Drive, Dropbox veya herhangi bir görsel bağlantısı. 
+                <br>Google Drive linki için: Dosya → Paylaş → Bağlantı Al → <em>Herkese Açık</em>
+              </p>
+            </div>
+
+            <!-- File upload -->
+            <div id="imgFileSection" style="display:none;">
+              <div id="dropZone" 
+                onclick="document.getElementById('fileInput').click()"
+                ondragover="event.preventDefault();this.style.borderColor='#1C1C1C'"
+                ondragleave="this.style.borderColor='#e3e2e0'"
+                ondrop="handleDrop(event)"
+                style="border:2px dashed #e3e2e0;padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s;background:#faf9f7;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c4c7c7" stroke-width="1.2" style="margin:0 auto .75rem;display:block;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <p style="font-size:.82rem;color:#444748;margin-bottom:.25rem;">Sürükle & Bırak veya tıkla</p>
+                <p style="font-size:.7rem;color:#747878;">JPG, PNG — Max 2MB önerilir</p>
+              </div>
+              <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="handleFileUpload(this)">
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="card">
+            <p class="lbl" style="margin-bottom:.75rem;font-size:.65rem;">Önizleme</p>
+            <div style="aspect-ratio:4/5;background:#f4f3f1;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+              <img id="imgPreview" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;">
+              <div id="noPreview" style="text-align:center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c4c7c7" stroke-width="1" style="margin:0 auto;display:block;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <p style="font-size:.72rem;color:#c4c7c7;margin-top:.5rem;">Görsel yok</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Save button -->
+          <button class="btn-p" onclick="saveProduct()" style="width:100%;justify-content:center;margin-top:1rem;padding:1rem;">
+            ✓ Ürünü Kaydet
+          </button>
+          <button class="btn-o" onclick="switchTab('urunler')" style="width:100%;justify-content:center;margin-top:.5rem;">
+            İptal
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AYARLAR ══ -->
+    <div id="tab-ayarlar-content" style="display:none;">
+      <h2 style="font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:400;margin-bottom:1.5rem;">Site Ayarları</h2>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+        <!-- Hero settings -->
+        <div class="card">
+          <p class="lbl" style="margin-bottom:1.25rem;color:#747878;font-size:.62rem;border-bottom:1px solid #e3e2e0;padding-bottom:.75rem;">Ana Sayfa Hero</p>
+          <div style="display:grid;gap:1rem;">
+            <div>
+              <label class="lbl field-label">Koleksiyon Etiketi</label>
+              <input type="text" id="sHeroTag" class="field" placeholder="ör. Yeni Koleksiyon — 2025">
+            </div>
+            <div>
+              <label class="lbl field-label">Hero Başlık</label>
+              <input type="text" id="sHeroTitle" class="field" placeholder="ör. El Yapımı Ahşabın Sanatı">
+            </div>
+            <div>
+              <label class="lbl field-label">Hero Açıklama</label>
+              <textarea id="sHeroDesc" class="field" rows="3" placeholder="Kısa bir tanıtım metni..." style="resize:vertical;"></textarea>
+            </div>
+            <div>
+              <label class="lbl field-label">Hero Görsel URL</label>
+              <input type="url" id="sHeroImg" class="field" placeholder="https://...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin password change -->
+        <div class="card">
+          <p class="lbl" style="margin-bottom:1.25rem;color:#747878;font-size:.62rem;border-bottom:1px solid #e3e2e0;padding-bottom:.75rem;">Güvenlik</p>
+          <div style="display:grid;gap:1rem;">
+            <div>
+              <label class="lbl field-label">Mevcut Şifre</label>
+              <input type="password" id="sMevcut" class="field" placeholder="••••••••">
+            </div>
+            <div>
+              <label class="lbl field-label">Yeni Şifre</label>
+              <input type="password" id="sYeni" class="field" placeholder="••••••••">
+            </div>
+            <div>
+              <label class="lbl field-label">Yeni Şifre (Tekrar)</label>
+              <input type="password" id="sYeniTekrar" class="field" placeholder="••••••••">
+            </div>
+            <button class="btn-p" onclick="changePassword()">Şifreyi Güncelle</button>
+          </div>
+        </div>
+
+        <!-- izyco settings -->
+        <div class="card">
+          <p class="lbl" style="margin-bottom:1.25rem;color:#747878;font-size:.62rem;border-bottom:1px solid #e3e2e0;padding-bottom:.75rem;">izyco Ödeme Ayarları</p>
+          <div style="display:grid;gap:1rem;">
+            <div style="background:#fff9eb;border:1px solid #DFB947;padding:.875rem;font-size:.78rem;line-height:1.6;color:#444;">
+              <strong>Nasıl başlarsınız?</strong><br>
+              1. <a href="https://izyco.com" target="_blank" style="color:#1C1C1C;">izyco.com</a>'a gidin<br>
+              2. Üye İşyeri Başvurusu yapın<br>
+              3. Merchant ID ve API Key alın<br>
+              4. Aşağıya girin ve sepet.html'e kopyalayın
+            </div>
+            <div>
+              <label class="lbl field-label">Merchant ID</label>
+              <input type="text" id="sIzycoId" class="field" placeholder="izyco'dan alınan Merchant ID">
+            </div>
+            <div>
+              <label class="lbl field-label">API Key</label>
+              <input type="text" id="sIzycoKey" class="field" placeholder="izyco API Key">
+            </div>
+          </div>
+        </div>
+
+        <!-- Export/Import -->
+        <div class="card">
+          <p class="lbl" style="margin-bottom:1.25rem;color:#747878;font-size:.62rem;border-bottom:1px solid #e3e2e0;padding-bottom:.75rem;">Yedek & Geri Yükle</p>
+          <div style="display:grid;gap:.75rem;">
+            <p style="font-size:.82rem;color:#444748;line-height:1.6;">Ürün verilerinizi yedekleyin veya başka bir bilgisayara taşıyın.</p>
+            <button class="btn-p" onclick="exportData()">↓ Veriyi İndir (JSON)</button>
+            <div style="border:2px dashed #e3e2e0;padding:1rem;text-align:center;cursor:pointer;" onclick="document.getElementById('importFile').click()">
+              <p style="font-size:.8rem;color:#747878;">JSON dosyası yüklemek için tıkla</p>
+            </div>
+            <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(this)">
+            <div style="border-top:1px solid #e3e2e0;padding-top:.75rem;">
+              <button class="btn-danger" onclick="resetAllData()" style="width:100%;">⚠ Tüm Verileri Sıfırla</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+        <button class="btn-p" onclick="saveSettings()" style="padding:1rem 2.5rem;">✓ Ayarları Kaydet</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Delete Confirm Modal -->
+<div id="deleteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:2rem;max-width:380px;width:90%;margin:1rem;">
+    <h3 style="font-family:'Noto Serif',serif;font-size:1.25rem;margin-bottom:.75rem;">Ürünü Sil</h3>
+    <p id="deleteMsg" style="font-size:.88rem;color:#444748;margin-bottom:1.5rem;line-height:1.6;"></p>
+    <div style="display:flex;gap:.75rem;">
+      <button class="btn-danger" onclick="confirmDelete()" style="flex:1;padding:.85rem;">Evet, Sil</button>
+      <button class="btn-o" onclick="closeDeleteModal()" style="flex:1;padding:.85rem;justify-content:center;">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ JAVASCRIPT ══════════════════ -->
+<script>
+// ─── AUTH ────────────────────────────────────────────────
+const PASS_KEY='keskeenAdminPass';
+const DB='keskeenProducts';
+const SETTINGS_KEY='keskeenSettings';
+
+function getPass(){return localStorage.getItem(PASS_KEY)||'keskeen2025';}
+
+function doLogin(){
+  const p=document.getElementById('loginPass').value;
+  if(p===getPass()){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
+    initAdmin();
+  }else{
+    document.getElementById('loginErr').style.display='block';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+  }
+}
+
+function doLogout(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('loginPass').value='';
+}
+
+// ─── DATA ────────────────────────────────────────────────
+const SAMPLE=[
+  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası. Her parça kendi içinde özgündür.',gorselURL:'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80',stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
+  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı.',gorselURL:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80',stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
+  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk.',gorselURL:'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-03'},
+  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı el yapımı orta sehpa.',gorselURL:'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-04'},
+];
+
+function getProducts(){
+  const s=localStorage.getItem(DB);
+  if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}
+  return JSON.parse(s);
+}
+function saveProducts(p){localStorage.setItem(DB,JSON.stringify(p));}
+function fmt(n){return n.toLocaleString('tr-TR')+' ₺';}
+
+// ─── TABS ────────────────────────────────────────────────
+function switchTab(name){
+  ['urunler','ekle','ayarlar'].forEach(t=>{
+    document.getElementById('tab-'+t+'-content').style.display=t===name?'block':'none';
+    document.getElementById('tab-'+t).classList.toggle('active',t===name);
+  });
+  if(name==='urunler')renderList(getProducts());
+  if(name==='ayarlar')loadSettings();
+}
+
+// ─── PRODUCT LIST ────────────────────────────────────────
+let listCatFilter='';
+
+function renderList(products){
+  updateStats();
+  const container=document.getElementById('productTable');
+  if(!products.length){
+    container.innerHTML=`<div style="text-align:center;padding:3rem;color:#747878;">Ürün bulunamadı.</div>`;
+    return;
+  }
+  container.innerHTML=`
+    <div style="background:#fff;border:1px solid #e3e2e0;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f4f3f1;border-bottom:1px solid #e3e2e0;">
+            <th class="lbl" style="text-align:left;padding:.875rem 1rem;font-size:.6rem;color:#747878;width:60px;">Görsel</th>
+            <th class="lbl" style="text-align:left;padding:.875rem 1rem;font-size:.6rem;color:#747878;">Ürün Adı</th>
+            <th class="lbl" style="text-align:left;padding:.875rem 1rem;font-size:.6rem;color:#747878;">Kategori</th>
+            <th class="lbl" style="text-align:right;padding:.875rem 1rem;font-size:.6rem;color:#747878;">Fiyat</th>
+            <th class="lbl" style="text-align:center;padding:.875rem 1rem;font-size:.6rem;color:#747878;">Stok</th>
+            <th class="lbl" style="text-align:right;padding:.875rem 1rem;font-size:.6rem;color:#747878;">İşlem</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${products.map((p,i)=>`
+            <tr style="border-bottom:1px solid #f4f3f1;transition:background .15s;" 
+              onmouseover="this.style.background='#faf9f7'" onmouseout="this.style.background=''">
+              <td style="padding:.75rem 1rem;">
+                <img src="${p.gorselURL}" alt="${p.isim}" 
+                  style="width:50px;height:50px;object-fit:cover;background:#f4f3f1;display:block;"
+                  onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect fill=%22%23f4f3f1%22 width=%2250%22 height=%2250%22/></svg>'">
+              </td>
+              <td style="padding:.75rem 1rem;">
+                <p style="font-weight:500;font-size:.88rem;margin-bottom:.2rem;">${p.isim}</p>
+                ${p.ozellik?`<span style="background:#DFB947;color:#1C1C1C;font-family:'Manrope',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .5rem;">${p.ozellik}</span>`:''}
+              </td>
+              <td style="padding:.75rem 1rem;">
+                <span class="lbl" style="color:#747878;font-size:.6rem;">${p.kategori}</span>
+              </td>
+              <td style="padding:.75rem 1rem;text-align:right;font-weight:600;font-size:.9rem;">${fmt(p.fiyat)}</td>
+              <td style="padding:.75rem 1rem;text-align:center;">
+                <button onclick="toggleStok('${p.id}')" 
+                  style="padding:.3rem .7rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .2s;background:${p.stok?'#e8f5e9':'#ffdad6'};color:${p.stok?'#1a7a1a':'#93000a'};">
+                  ${p.stok?'Stokta':'Yok'}
+                </button>
+              </td>
+              <td style="padding:.75rem 1rem;text-align:right;">
+                <div style="display:flex;gap:.5rem;justify-content:flex-end;">
+                  <button onclick="editProduct('${p.id}')" class="btn-o" style="padding:.4rem .8rem;font-size:.6rem;">Düzenle</button>
+                  <button onclick="askDelete('${p.id}','${p.isim.replace(/'/g,"\\'")}')"> 
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ba1a1a" stroke-width="1.5" style="cursor:pointer;" title="Sil"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function filterList(q){
+  let products=getProducts();
+  if(listCatFilter)products=products.filter(p=>p.kategori===listCatFilter);
+  if(q&&q.length>0)products=products.filter(p=>p.isim.toLowerCase().includes(q.toLowerCase()));
+  renderList(products);
+}
+
+function filterListCat(cat){
+  listCatFilter=cat;
+  document.querySelectorAll('#listFilters button').forEach(btn=>{
+    const isActive=btn.dataset.cat===cat;
+    btn.style.background=isActive?'#1C1C1C':'#fff';
+    btn.style.color=isActive?'#fff':'#555';
+    btn.style.borderColor=isActive?'#1C1C1C':'#e3e2e0';
+  });
+  document.getElementById('listSearch').value='';
+  filterList('');
+}
+
+function updateStats(){
+  const products=getProducts();
+  document.getElementById('statTotal').textContent=products.length;
+  document.getElementById('statStok').textContent=products.filter(p=>p.stok).length;
+  document.getElementById('statYok').textContent=products.filter(p=>!p.stok).length;
+}
+
+function toggleStok(id){
+  const products=getProducts();
+  const p=products.find(x=>x.id===id);
+  if(!p)return;
+  p.stok=!p.stok;
+  saveProducts(products);
+  renderList(products);
+  toast(`${p.isim} — stok durumu güncellendi`);
+}
+
+// ─── EDIT ────────────────────────────────────────────────
+function editProduct(id){
+  const products=getProducts();
+  const p=products.find(x=>x.id===id);
+  if(!p)return;
+  switchTab('ekle');
+  document.getElementById('formTitle').textContent='Ürünü Düzenle';
+  document.getElementById('editId').value=p.id;
+  document.getElementById('fIsim').value=p.isim;
+  document.getElementById('fKategori').value=p.kategori;
+  document.getElementById('fFiyat').value=p.fiyat;
+  document.getElementById('fAciklama').value=p.aciklama;
+  document.getElementById('fOzellik').value=p.ozellik||'';
+  document.getElementById('fStok').checked=p.stok;
+  document.getElementById('fGorselURL').value=p.gorselURL||'';
+  previewFromUrl(p.gorselURL||'');
+}
+
+function clearForm(){
+  document.getElementById('editId').value='';
+  document.getElementById('fIsim').value='';
+  document.getElementById('fKategori').value='';
+  document.getElementById('fFiyat').value='';
+  document.getElementById('fAciklama').value='';
+  document.getElementById('fOzellik').value='';
+  document.getElementById('fStok').checked=true;
+  document.getElementById('fGorselURL').value='';
+  previewFromUrl('');
+}
+
+// ─── SAVE ────────────────────────────────────────────────
+function saveProduct(){
+  const isim=document.getElementById('fIsim').value.trim();
+  const kategori=document.getElementById('fKategori').value;
+  const fiyat=parseFloat(document.getElementById('fFiyat').value);
+  const aciklama=document.getElementById('fAciklama').value.trim();
+  const ozellik=document.getElementById('fOzellik').value.trim();
+  const stok=document.getElementById('fStok').checked;
+  const gorselURL=document.getElementById('fGorselURL').value.trim()||document.getElementById('imgPreview').src;
+
+  if(!isim){alert('Ürün adı zorunludur.');document.getElementById('fIsim').focus();return;}
+  if(!kategori){alert('Kategori seçiniz.');return;}
+  if(!fiyat||fiyat<=0){alert('Geçerli bir fiyat girin.');document.getElementById('fFiyat').focus();return;}
+  if(!aciklama){alert('Açıklama zorunludur.');document.getElementById('fAciklama').focus();return;}
+
+  const products=getProducts();
+  const editId=document.getElementById('editId').value;
+
+  if(editId){
+    const idx=products.findIndex(p=>p.id===editId);
+    if(idx>-1){
+      products[idx]={...products[idx],isim,kategori,fiyat,aciklama,ozellik,stok,gorselURL};
+      toast('Ürün güncellendi ✓');
+    }
+  }else{
+    const newProd={
+      id:'p'+Date.now(),
+      isim,kategori,fiyat,aciklama,ozellik,stok,gorselURL,
+      tarih:new Date().toISOString().split('T')[0]
+    };
+    products.unshift(newProd);
+    toast('Yeni ürün eklendi ✓');
+  }
+  saveProducts(products);
+  clearForm();
+  document.getElementById('formTitle').textContent='Yeni Ürün Ekle';
+  switchTab('urunler');
+}
+
+// ─── DELETE ──────────────────────────────────────────────
+let deleteTargetId=null;
+
+function askDelete(id,name){
+  deleteTargetId=id;
+  document.getElementById('deleteMsg').textContent=`"${name}" ürününü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`;
+  document.getElementById('deleteModal').style.display='flex';
+}
+function closeDeleteModal(){
+  document.getElementById('deleteModal').style.display='none';
+  deleteTargetId=null;
+}
+function confirmDelete(){
+  if(!deleteTargetId)return;
+  let products=getProducts();
+  products=products.filter(p=>p.id!==deleteTargetId);
+  saveProducts(products);
+  closeDeleteModal();
+  renderList(products);
+  toast('Ürün silindi');
+}
+
+// ─── IMAGE ────────────────────────────────────────────────
+function switchImgTab(mode){
+  document.getElementById('imgUrlSection').style.display=mode==='url'?'block':'none';
+  document.getElementById('imgFileSection').style.display=mode==='file'?'block':'none';
+  document.getElementById('imgTabUrl').style.borderBottomColor=mode==='url'?'#1C1C1C':'transparent';
+  document.getElementById('imgTabUrl').style.color=mode==='url'?'#1C1C1C':'#747878';
+  document.getElementById('imgTabFile').style.borderBottomColor=mode==='file'?'#1C1C1C':'transparent';
+  document.getElementById('imgTabFile').style.color=mode==='file'?'#1C1C1C':'#747878';
+}
+
+function previewFromUrl(url){
+  const img=document.getElementById('imgPreview');
+  const noP=document.getElementById('noPreview');
+  if(url&&url.length>5){
+    img.src=url;img.style.display='block';noP.style.display='none';
+  }else{
+    img.src='';img.style.display='none';noP.style.display='block';
+  }
+}
+
+function handleFileUpload(input){
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){
+    alert('Dosya 5MB\'dan büyük olamaz. Daha küçük bir görsel deneyin veya URL kullanın.');return;
+  }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const b64=e.target.result;
+    document.getElementById('fGorselURL').value=b64;
+    previewFromUrl(b64);
+    toast('Görsel yüklendi');
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleDrop(e){
+  e.preventDefault();
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')){
+    const fakeInput={files:[file]};
+    handleFileUpload(fakeInput);
+  }
+}
+
+// ─── SETTINGS ────────────────────────────────────────────
+function loadSettings(){
+  const s=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');
+  if(s.heroTag)document.getElementById('sHeroTag').value=s.heroTag;
+  if(s.heroTitle)document.getElementById('sHeroTitle').value=s.heroTitle;
+  if(s.heroDesc)document.getElementById('sHeroDesc').value=s.heroDesc;
+  if(s.heroImg)document.getElementById('sHeroImg').value=s.heroImg;
+  if(s.izycoId)document.getElementById('sIzycoId').value=s.izycoId;
+  if(s.izycoKey)document.getElementById('sIzycoKey').value=s.izycoKey;
+}
+
+function saveSettings(){
+  const s={
+    heroTag:document.getElementById('sHeroTag').value,
+    heroTitle:document.getElementById('sHeroTitle').value,
+    heroDesc:document.getElementById('sHeroDesc').value,
+    heroImg:document.getElementById('sHeroImg').value,
+    izycoId:document.getElementById('sIzycoId').value,
+    izycoKey:document.getElementById('sIzycoKey').value,
+  };
+  localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
+  toast('Ayarlar kaydedildi ✓ — izyco bilgilerini sepet.html dosyasına da eklemeyi unutmayın.');
+}
+
+// ─── CHANGE PASSWORD ─────────────────────────────────────
+function changePassword(){
+  const mevcut=document.getElementById('sMevcut').value;
+  const yeni=document.getElementById('sYeni').value;
+  const tekrar=document.getElementById('sYeniTekrar').value;
+  if(mevcut!==getPass()){alert('Mevcut şifre hatalı.');return;}
+  if(yeni.length<6){alert('Yeni şifre en az 6 karakter olmalıdır.');return;}
+  if(yeni!==tekrar){alert('Yeni şifreler eşleşmiyor.');return;}
+  localStorage.setItem(PASS_KEY,yeni);
+  document.getElementById('sMevcut').value='';
+  document.getElementById('sYeni').value='';
+  document.getElementById('sYeniTekrar').value='';
+  toast('Şifre güncellendi ✓');
+}
+
+// ─── EXPORT / IMPORT ─────────────────────────────────────
+function exportData(){
+  const data={products:getProducts(),settings:JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}'),exported:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='keskeendesign-yedek-'+Date.now()+'.json';a.click();
+  URL.revokeObjectURL(url);
+  toast('Veri indirildi');
+}
+
+function importData(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.products){saveProducts(data.products);}
+      if(data.settings){localStorage.setItem(SETTINGS_KEY,JSON.stringify(data.settings));}
+      renderList(getProducts());
+      toast('Veri geri yüklendi ✓');
+    }catch{alert('Geçersiz JSON dosyası.');}
+  };
+  reader.readAsText(file);
+}
+
+function resetAllData(){
+  if(confirm('DİKKAT: Tüm ürünler ve ayarlar silinecek. Emin misiniz?')){
+    localStorage.removeItem(DB);
+    localStorage.removeItem(SETTINGS_KEY);
+    renderList(getProducts());
+    toast('Veriler sıfırlandı');
+  }
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.innerHTML='✓ '+msg;
+  t.style.opacity='1';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+// ─── INIT ────────────────────────────────────────────────
+function initAdmin(){
+  renderList(getProducts());
+}
+
+// Close delete modal on backdrop click
+document.getElementById('deleteModal').addEventListener('click',function(e){
+  if(e.target===this)closeDeleteModal();
+});
+
+// Load settings on startup (for index.html to read)
+window.KESKEENSETTINGS=()=>JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}');
+</script>
+</body>
+</html>

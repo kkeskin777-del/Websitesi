@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ürün Detay | KESKEEN DESIGN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
+.lbl{font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;transition:color .2s;text-decoration:none;}
+.nav-a:hover{color:#1C1C1C;}
+.btn-p{background:#1C1C1C;color:#fff;padding:1rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;transition:opacity .2s;width:100%;}
+.btn-p:hover{opacity:.82;}
+.btn-o{background:transparent;color:#1C1C1C;padding:.85rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid #1C1C1C;cursor:pointer;transition:all .2s;width:100%;}
+.btn-o:hover{background:#1C1C1C;color:#fff;}
+.cart-badge{position:absolute;top:-7px;right:-7px;background:#DFB947;color:#1C1C1C;font-size:.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.qty-btn{width:36px;height:36px;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.qty-btn:hover{background:#f4f3f1;}
+.related-card{cursor:pointer;transition:transform .3s;}
+.related-card:hover{transform:translateY(-5px);}
+.related-card img{transition:transform .6s;}
+.related-card:hover img{transform:scale(1.05);}
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1C1C1C;color:#fff;padding:1rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.82rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header style="position:sticky;top:0;z-index:100;background:#faf9f7;border-bottom:1px solid #e3e2e0;">
+  <nav style="max-width:1440px;margin:0 auto;padding:1.5rem 4rem;display:flex;justify-content:space-between;align-items:center;">
+    <a href="index.html" style="text-decoration:none;line-height:1.1;">
+      <span style="font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;color:#1C1C1C;display:block;">KESKEEN</span>
+      <span class="lbl" style="color:#747878;letter-spacing:.25em;font-size:.55rem;">DESIGN</span>
+    </a>
+    <div id="dNav" style="display:flex;align-items:center;gap:2.5rem;">
+      <a href="urunler.html?kategori=masalar" class="nav-a">Masalar</a>
+      <a href="urunler.html?kategori=raflar" class="nav-a">Raflar</a>
+      <a href="urunler.html?kategori=standlar" class="nav-a">Standlar</a>
+      <a href="urunler.html?kategori=aksesuarlar" class="nav-a">Aksesuarlar</a>
+      <a href="urunler.html?kategori=yeni" class="nav-a" style="color:#DFB947;">Yeni Gelenler</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:1.25rem;">
+      <a href="sepet.html" style="position:relative;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+      </a>
+      <button onclick="toggleMobile()" id="mBtn" style="background:none;border:none;cursor:pointer;display:none;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div id="mNav" style="display:none;background:#faf9f7;border-top:1px solid #e3e2e0;padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;">
+    <a href="urunler.html?kategori=masalar" class="nav-a">Masalar</a>
+    <a href="urunler.html?kategori=raflar" class="nav-a">Raflar</a>
+    <a href="urunler.html?kategori=standlar" class="nav-a">Standlar</a>
+    <a href="urunler.html?kategori=aksesuarlar" class="nav-a">Aksesuarlar</a>
+    <a href="urunler.html?kategori=yeni" class="nav-a" style="color:#DFB947;">Yeni Gelenler</a>
+  </div>
+</header>
+
+<!-- ═══════════ BREADCRUMB ═══════════ -->
+<div style="max-width:1440px;margin:0 auto;padding:1.25rem 4rem;">
+  <span class="lbl" style="color:#747878;font-size:.62rem;">
+    <a href="index.html" style="color:#747878;text-decoration:none;">Ana Sayfa</a>
+    <span style="margin:0 .5rem;">/</span>
+    <a href="urunler.html" style="color:#747878;text-decoration:none;">Ürünler</a>
+    <span style="margin:0 .5rem;">/</span>
+    <span id="breadName" style="color:#1C1C1C;"></span>
+  </span>
+</div>
+
+<!-- ═══════════ PRODUCT DETAIL ═══════════ -->
+<div id="productDetail" style="max-width:1440px;margin:0 auto;padding:1rem 4rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+  <!-- Left: Images -->
+  <div>
+    <div id="mainImgWrap" style="aspect-ratio:4/5;background:#fff;overflow:hidden;margin-bottom:1rem;">
+      <img id="mainImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;padding:2.5rem;mix-blend-mode:multiply;transition:transform .5s;"
+        onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
+    </div>
+    <!-- Thumbnail strip (show if product has gallery) -->
+    <div id="thumbStrip" style="display:flex;gap:.5rem;"></div>
+  </div>
+
+  <!-- Right: Info -->
+  <div style="padding-top:1rem;">
+    <span class="lbl" id="productCategory" style="color:#747878;display:block;margin-bottom:.75rem;"></span>
+    <h1 id="productName" style="font-family:'Noto Serif',serif;font-size:2.25rem;font-weight:400;line-height:1.2;margin-bottom:1rem;"></h1>
+    
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;">
+      <span id="productPrice" style="font-family:'Manrope',sans-serif;font-size:1.4rem;font-weight:600;color:#1C1C1C;"></span>
+      <span id="stockBadge" class="lbl" style="font-size:.58rem;padding:.25rem .6rem;"></span>
+    </div>
+
+    <p id="productDesc" style="color:#444748;line-height:1.8;font-size:.95rem;margin-bottom:2rem;"></p>
+
+    <!-- Features -->
+    <div id="productFeatures" style="margin-bottom:2rem;padding:1.5rem;background:#f4f3f1;border-left:3px solid #DFB947;display:none;">
+      <p class="lbl" style="margin-bottom:.75rem;font-size:.62rem;">Ürün Özellikleri</p>
+      <p id="featuresText" style="font-size:.88rem;line-height:1.7;color:#444748;"></p>
+    </div>
+
+    <!-- Quantity -->
+    <div style="margin-bottom:1.5rem;">
+      <p class="lbl" style="color:#747878;margin-bottom:.75rem;font-size:.62rem;">Adet</p>
+      <div style="display:flex;align-items:center;gap:0;">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div style="width:52px;height:36px;border-top:1px solid #e3e2e0;border-bottom:1px solid #e3e2e0;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:600;" id="qtyDisplay">1</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div id="buyBtns" style="display:flex;flex-direction:column;gap:.75rem;">
+      <button class="btn-p" onclick="addToCart()" id="addBtn">Sepete Ekle</button>
+      <a href="sepet.html" class="btn-o" style="text-align:center;text-decoration:none;" onclick="addToCart()">Hemen Satın Al</a>
+    </div>
+
+    <!-- Divider -->
+    <div style="border-top:1px solid #e3e2e0;margin:2rem 0;"></div>
+
+    <!-- Info accordion -->
+    <div>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('kargo')">
+        <span class="lbl" style="font-size:.65rem;">Kargo & Teslimat</span>
+        <span id="kargoArrow" style="transition:transform .3s;">+</span>
+      </div>
+      <div id="kargoInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
+        Siparişler 2–5 iş günü içinde hazırlanır ve kargoya verilir. El yapımı ürünler için stok durumuna göre 1–2 hafta sürebilir. Türkiye geneline kargo ücretsizdir (1000 ₺ ve üzeri siparişlerde).
+      </div>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('iade')">
+        <span class="lbl" style="font-size:.65rem;">İade & Değişim</span>
+        <span id="iadeArrow" style="transition:transform .3s;">+</span>
+      </div>
+      <div id="iadeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
+        Ürünü teslim aldığınızdan itibaren 14 gün içinde iade edebilirsiniz. El yapımı ürünlerde küçük farklılıklar doğaldır ve kusur sayılmaz. İade için info@keskeendesign.com adresine yazın.
+      </div>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('malzeme')">
+        <span class="lbl" style="font-size:.65rem;">Malzeme & Bakım</span>
+        <span id="malzemeArrow" style="transition:transform .3s;">+</span>
+      </div>
+      <div id="malzemeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
+        Tüm ürünlerimiz doğal, FSC sertifikalı ahşaptan üretilmektedir. Gıda ile temas eden ürünler doğal bitkisel yağ ile bitirilmiştir. Nemden uzak tutun, 3 ayda bir zeytinyağı ile bakım yapın.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RELATED PRODUCTS ═══════════ -->
+<section style="background:#f4f3f1;padding:4rem 0;">
+  <div style="max-width:1440px;margin:0 auto;padding:0 4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;">
+      <h2 style="font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:400;">Benzer Ürünler</h2>
+      <a href="urunler.html" class="lbl" style="color:#1C1C1C;text-decoration:none;border-bottom:1px solid #1C1C1C;padding-bottom:2px;">Tüm Ürünler</a>
+    </div>
+    <div id="relatedGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;"></div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer style="background:#faf9f7;border-top:1px solid #e3e2e0;padding:3rem 4rem;">
+  <div style="max-width:1440px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
+    <a href="index.html" style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#1C1C1C;text-decoration:none;">KESKEEN DESIGN</a>
+    <p class="lbl" style="color:#747878;font-size:.6rem;">© 2025 El Yapımı Ahşap Ürünler — İstanbul</p>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast">✓ Sepete eklendi</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+const DB='keskeenProducts';const CART='keskeenCart';
+const SAMPLE=[
+  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası. Her parça kendi içinde özgündür.',gorselURL:'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80',stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
+  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı. Demir askı sistemi dahildir.',gorselURL:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80',stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
+  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk. Minimalist tasarım.',gorselURL:'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-03'},
+  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı üst, meşe ahşabı ayaklı el yapımı orta sehpa.',gorselURL:'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-04'},
+];
+
+function getProducts(){const s=localStorage.getItem(DB);if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}return JSON.parse(s);}
+function getCart(){const s=localStorage.getItem(CART);return s?JSON.parse(s):[];}
+function saveCart(c){localStorage.setItem(CART,JSON.stringify(c));}
+function fmt(n){return n.toLocaleString('tr-TR')+' ₺';}
+
+let currentProduct=null;
+let qty=1;
+
+function updateBadge(){
+  const cart=getCart();
+  const n=cart.reduce((a,i)=>a+i.adet,0);
+  const b=document.getElementById('cartBadge');
+  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+}
+
+function changeQty(delta){
+  qty=Math.max(1,qty+delta);
+  document.getElementById('qtyDisplay').textContent=qty;
+}
+
+function addToCart(){
+  if(!currentProduct||!currentProduct.stok)return;
+  let cart=getCart();
+  const existing=cart.find(i=>i.id===currentProduct.id);
+  if(existing){existing.adet+=qty;}
+  else{cart.push({id:currentProduct.id,isim:currentProduct.isim,fiyat:currentProduct.fiyat,adet:qty,gorselURL:currentProduct.gorselURL});}
+  saveCart(cart);
+  updateBadge();
+  showToast();
+}
+
+function showToast(){
+  const t=document.getElementById('toast');
+  t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',2500);
+}
+
+function toggleInfo(key){
+  const el=document.getElementById(key+'Info');
+  const arrow=document.getElementById(key+'Arrow');
+  const open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  arrow.style.transform=open?'rotate(0)':'rotate(45deg)';
+}
+
+function renderProduct(p){
+  currentProduct=p;
+  document.title=p.isim+' | KESKEEN DESIGN';
+  document.getElementById('breadName').textContent=p.isim;
+  document.getElementById('productCategory').textContent=p.kategori.charAt(0).toUpperCase()+p.kategori.slice(1);
+  document.getElementById('productName').textContent=p.isim;
+  document.getElementById('productPrice').textContent=fmt(p.fiyat);
+  document.getElementById('productDesc').textContent=p.aciklama;
+  document.getElementById('mainImg').src=p.gorselURL;
+  document.getElementById('mainImg').alt=p.isim;
+
+  // Stock badge
+  const sb=document.getElementById('stockBadge');
+  if(p.stok){
+    sb.textContent='Stokta Var';
+    sb.style.background='#f4f3f1';
+    sb.style.color='#444';
+  }else{
+    sb.textContent='Stok Yok';
+    sb.style.background='#ffdad6';
+    sb.style.color='#93000a';
+    document.getElementById('addBtn').disabled=true;
+    document.getElementById('addBtn').style.opacity='.4';
+    document.getElementById('addBtn').style.cursor='not-allowed';
+  }
+
+  // Optional: ozellik as feature
+  if(p.ozellik){
+    document.getElementById('productFeatures').style.display='block';
+    document.getElementById('featuresText').textContent=p.ozellik;
+  }
+}
+
+function renderRelated(p){
+  const all=getProducts();
+  const related=all.filter(x=>x.kategori===p.kategori&&x.id!==p.id).slice(0,4);
+  const grid=document.getElementById('relatedGrid');
+  if(!related.length){grid.parentElement.parentElement.style.display='none';return;}
+  grid.innerHTML=related.map(r=>`
+    <div class="related-card" onclick="location.href='urun-detay.html?id=${r.id}'">
+      <div style="aspect-ratio:3/4;background:#fff;overflow:hidden;margin-bottom:1rem;">
+        <img src="${r.gorselURL}" alt="${r.isim}" style="width:100%;height:100%;object-fit:cover;padding:1.25rem;mix-blend-mode:multiply;transition:transform .6s;" onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
+      </div>
+      <h4 style="font-size:.88rem;font-weight:500;margin-bottom:.35rem;">${r.isim}</h4>
+      <p class="lbl" style="color:#747878;">${fmt(r.fiyat)}</p>
+    </div>
+  `).join('');
+}
+
+function toggleMobile(){const n=document.getElementById('mNav');n.style.display=n.style.display==='flex'?'none':'flex';}
+
+function handleResize(){
+  const w=window.innerWidth;
+  const dn=document.getElementById('dNav');
+  const mb=document.getElementById('mBtn');
+  const detail=document.getElementById('productDetail');
+  const rg=document.getElementById('relatedGrid');
+  if(w<900){dn.style.display='none';mb.style.display='block';}
+  else{dn.style.display='flex';mb.style.display='none';}
+  if(detail){
+    if(w<768){detail.style.gridTemplateColumns='1fr';detail.style.gap='2rem';}
+    else{detail.style.gridTemplateColumns='1fr 1fr';detail.style.gap='5rem';}
+  }
+  if(rg){
+    if(w<600)rg.style.gridTemplateColumns='repeat(2,1fr)';
+    else rg.style.gridTemplateColumns='repeat(4,1fr)';
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get('id');
+  const products=getProducts();
+  const product=products.find(p=>p.id===id);
+  if(!product){
+    document.getElementById('productDetail').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:5rem 0;"><p style="font-size:1.2rem;color:#747878;font-family:'Noto Serif',serif;margin-bottom:1.5rem;">Ürün bulunamadı.</p><a href="urunler.html" style="font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#1C1C1C;color:#fff;padding:1rem 2.5rem;text-decoration:none;">Ürünlere Dön</a></div>`;
+    return;
+  }
+  renderProduct(product);
+  renderRelated(product);
+  updateBadge();
+  handleResize();
+  window.addEventListener('resize',handleResize);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepet | KESKEEN DESIGN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
+.lbl{font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;text-decoration:none;}
+.btn-p{background:#1C1C1C;color:#fff;padding:1rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;transition:opacity .2s;width:100%;}
+.btn-p:hover{opacity:.82;}
+.cart-badge{position:absolute;top:-7px;right:-7px;background:#DFB947;color:#1C1C1C;font-size:.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.field-input{width:100%;padding:.75rem 1rem;border:1px solid #e3e2e0;background:#fff;font-family:'Manrope',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;}
+.field-input:focus{border-color:#1C1C1C;}
+.qty-btn{width:32px;height:32px;border:1px solid #e3e2e0;background:#faf9f7;cursor:pointer;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;transition:background .2s;}
+.qty-btn:hover{background:#f4f3f1;}
+.remove-btn{background:none;border:none;cursor:pointer;color:#747878;font-size:.72rem;font-family:'Manrope',sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;padding:0;}
+.remove-btn:hover{color:#ba1a1a;}
+.section-title{font-family:'Noto Serif',serif;font-size:1.6rem;font-weight:400;margin-bottom:1.5rem;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header style="position:sticky;top:0;z-index:100;background:#faf9f7;border-bottom:1px solid #e3e2e0;">
+  <nav style="max-width:1440px;margin:0 auto;padding:1.5rem 4rem;display:flex;justify-content:space-between;align-items:center;">
+    <a href="index.html" style="text-decoration:none;line-height:1.1;">
+      <span style="font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;color:#1C1C1C;display:block;">KESKEEN</span>
+      <span class="lbl" style="color:#747878;letter-spacing:.25em;font-size:.55rem;">DESIGN</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:1.25rem;">
+      <a href="sepet.html" style="position:relative;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- ═══════════ BREADCRUMB ═══════════ -->
+<div style="max-width:1440px;margin:0 auto;padding:1.25rem 4rem;">
+  <span class="lbl" style="color:#747878;font-size:.62rem;">
+    <a href="index.html" style="color:#747878;text-decoration:none;">Ana Sayfa</a>
+    <span style="margin:0 .5rem;">/</span>Sepet
+  </span>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div style="max-width:1440px;margin:0 auto;padding:0 4rem 5rem;">
+
+  <!-- EMPTY CART -->
+  <div id="emptyCart" style="display:none;text-align:center;padding:6rem 0;">
+    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#c4c7c7" stroke-width="1" style="margin:0 auto 1.5rem;display:block;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <h2 style="font-family:'Noto Serif',serif;font-size:1.5rem;font-weight:400;margin-bottom:.75rem;">Sepetiniz boş</h2>
+    <p style="color:#747878;margin-bottom:2rem;">Ürünlerimizi inceleyerek başlayın.</p>
+    <a href="urunler.html" style="display:inline-block;background:#1C1C1C;color:#fff;padding:1rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;">Alışverişe Başla</a>
+  </div>
+
+  <!-- CART + CHECKOUT -->
+  <div id="cartContent" style="display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:start;">
+
+    <!-- LEFT: Cart Items + Form -->
+    <div>
+      <!-- Cart Items -->
+      <h1 class="section-title">Sepetim</h1>
+      <div id="cartItems"></div>
+
+      <div style="border-top:1px solid #e3e2e0;margin:2rem 0;"></div>
+
+      <!-- Customer Info Form -->
+      <h2 class="section-title" style="font-size:1.35rem;">Teslimat Bilgileri</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">Ad</label>
+          <input type="text" id="fAd" class="field-input" placeholder="Adınız">
+        </div>
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">Soyad</label>
+          <input type="text" id="fSoyad" class="field-input" placeholder="Soyadınız">
+        </div>
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">E-posta</label>
+          <input type="email" id="fEmail" class="field-input" placeholder="email@adres.com">
+        </div>
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">Telefon</label>
+          <input type="tel" id="fTel" class="field-input" placeholder="05XX XXX XX XX">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">Adres</label>
+          <textarea id="fAdres" class="field-input" rows="3" placeholder="Açık adresiniz..." style="resize:vertical;"></textarea>
+        </div>
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">İlçe</label>
+          <input type="text" id="fIlce" class="field-input" placeholder="İlçe">
+        </div>
+        <div>
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">İl</label>
+          <input type="text" id="fIl" class="field-input" placeholder="İl" value="İstanbul">
+        </div>
+        <div style="grid-column:1/-1;">
+          <label class="lbl" style="display:block;margin-bottom:.5rem;font-size:.62rem;color:#747878;">Sipariş Notu (İsteğe Bağlı)</label>
+          <textarea id="fNot" class="field-input" rows="2" placeholder="Özel istek veya not..." style="resize:vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order Summary + Payment -->
+    <div style="position:sticky;top:100px;">
+      <div style="background:#f4f3f1;padding:2rem;border-top:3px solid #1C1C1C;">
+        <h2 class="section-title" style="font-size:1.25rem;">Sipariş Özeti</h2>
+
+        <!-- Summary items -->
+        <div id="summaryItems" style="margin-bottom:1.5rem;border-bottom:1px solid #e3e2e0;padding-bottom:1.5rem;"></div>
+
+        <!-- Totals -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <span style="font-size:.9rem;color:#444748;">Ara Toplam</span>
+          <span id="subtotal" style="font-size:.9rem;font-weight:500;"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+          <span style="font-size:.9rem;color:#444748;">Kargo</span>
+          <span id="kargo" style="font-size:.9rem;font-weight:500;color:#1a7a1a;"></span>
+        </div>
+        <div style="border-top:1px solid #e3e2e0;margin:1rem 0;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;">
+          <span style="font-weight:700;font-size:1rem;">Toplam</span>
+          <span id="totalPrice" style="font-weight:700;font-size:1.15rem;color:#1C1C1C;"></span>
+        </div>
+
+        <!-- izyco PAYMENT BUTTON -->
+        <div id="paySection">
+          <!--
+          ╔══════════════════════════════════════════════╗
+          ║  izyco ÖDEME ENTEGRASYONU                    ║
+          ║  Aşağıdaki butona tıklandığında izyco'ya     ║
+          ║  sipariş gönderilir.                         ║
+          ║  Merchant ID ve API key almak için:           ║
+          ║  https://izyco.com → Üye İşyeri Başvurusu   ║
+          ╚══════════════════════════════════════════════╝
+          -->
+          <button class="btn-p" onclick="startPayment()" id="payBtn">
+            Güvenli Ödeme Yap
+          </button>
+          <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.75rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#747878" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <span class="lbl" style="color:#747878;font-size:.58rem;">256-bit SSL şifreli güvenli ödeme</span>
+          </div>
+          <!-- izyco logo placeholder -->
+          <div style="margin-top:1rem;padding:.75rem;background:#fff;text-align:center;border:1px solid #e3e2e0;">
+            <span class="lbl" style="color:#747878;font-size:.6rem;">Ödeme: izyco — Kredi Kartı / Banka Kartı</span>
+          </div>
+        </div>
+
+        <!-- Success message (after payment) -->
+        <div id="successMsg" style="display:none;text-align:center;padding:1.5rem 0;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1a7a1a" stroke-width="1.5" style="margin:0 auto 1rem;display:block;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <h3 style="font-family:'Noto Serif',serif;font-size:1.2rem;margin-bottom:.5rem;">Siparişiniz Alındı!</h3>
+          <p style="font-size:.85rem;color:#444748;line-height:1.6;">Sipariş onayı e-posta adresinize gönderildi. En kısa sürede hazırlanacaktır.</p>
+        </div>
+      </div>
+
+      <!-- Trust badges -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem;text-align:center;">
+        <div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#747878" stroke-width="1.2" style="margin:0 auto .5rem;display:block;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <p class="lbl" style="color:#747878;font-size:.55rem;line-height:1.5;">Güvenli Ödeme</p>
+        </div>
+        <div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#747878" stroke-width="1.2" style="margin:0 auto .5rem;display:block;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <p class="lbl" style="color:#747878;font-size:.55rem;line-height:1.5;">Hızlı Kargo</p>
+        </div>
+        <div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#747878" stroke-width="1.2" style="margin:0 auto .5rem;display:block;"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          <p class="lbl" style="color:#747878;font-size:.55rem;line-height:1.5;">14 Gün İade</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end cartContent -->
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer style="background:#faf9f7;border-top:1px solid #e3e2e0;padding:3rem 4rem;">
+  <div style="max-width:1440px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
+    <a href="index.html" style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#1C1C1C;text-decoration:none;">KESKEEN DESIGN</a>
+    <p class="lbl" style="color:#747878;font-size:.6rem;">© 2025 El Yapımı Ahşap Ürünler — İstanbul</p>
+  </div>
+</footer>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+// ════════════════════════════════════════════
+// izyco AYARLARI — BURAYA KENDİ BİLGİLERİNİZİ GİRİN
+// Üye işyeri başvurusu için: https://izyco.com
+// ════════════════════════════════════════════
+const IZYCO_CONFIG = {
+  merchantId: 'BURAYA_IZYCO_MERCHANT_ID_GIRIN',   // izyco'dan alacağınız ID
+  apiKey: 'BURAYA_IZYCO_API_KEY_GIRIN',             // izyco API key
+  environment: 'sandbox', // test için 'sandbox', yayın için 'production'
+  callbackUrl: 'BURAYA_SITENIZIN_URL_GIRIN/siparis-basarili.html',
+  // izyco API endpoint: https://api.izyco.com/v1/payment
+};
+// ════════════════════════════════════════════
+
+const CART='keskeenCart';
+
+function getCart(){const s=localStorage.getItem(CART);return s?JSON.parse(s):[];}
+function saveCart(c){localStorage.setItem(CART,JSON.stringify(c));}
+function fmt(n){return n.toLocaleString('tr-TR')+' ₺';}
+
+function updateBadge(){
+  const cart=getCart();
+  const n=cart.reduce((a,i)=>a+i.adet,0);
+  const b=document.getElementById('cartBadge');
+  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+}
+
+function changeQty(id, delta){
+  let cart=getCart();
+  const item=cart.find(i=>i.id===id);
+  if(!item)return;
+  item.adet=Math.max(1,item.adet+delta);
+  saveCart(cart);
+  renderCart();
+}
+
+function removeItem(id){
+  let cart=getCart();
+  cart=cart.filter(i=>i.id!==id);
+  saveCart(cart);
+  renderCart();
+}
+
+function renderCart(){
+  const cart=getCart();
+  updateBadge();
+
+  const emptyEl=document.getElementById('emptyCart');
+  const contentEl=document.getElementById('cartContent');
+
+  if(!cart.length){
+    emptyEl.style.display='block';
+    contentEl.style.display='none';
+    return;
+  }
+  emptyEl.style.display='none';
+  contentEl.style.display='grid';
+
+  // Cart items
+  const itemsEl=document.getElementById('cartItems');
+  itemsEl.innerHTML=cart.map(item=>`
+    <div style="display:flex;gap:1.5rem;padding:1.25rem 0;border-bottom:1px solid #e3e2e0;align-items:center;">
+      <img src="${item.gorselURL}" alt="${item.isim}" 
+        style="width:90px;height:90px;object-fit:cover;background:#fff;padding:.5rem;mix-blend-mode:multiply;flex-shrink:0;"
+        onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
+      <div style="flex:1;">
+        <h4 style="font-size:.92rem;font-weight:500;margin-bottom:.25rem;">${item.isim}</h4>
+        <p class="lbl" style="color:#747878;font-size:.62rem;margin-bottom:.75rem;">${fmt(item.fiyat)}</p>
+        <div style="display:flex;align-items:center;gap:0;">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span style="width:36px;height:32px;border-top:1px solid #e3e2e0;border-bottom:1px solid #e3e2e0;display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;">${item.adet}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+        </div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:1rem;">
+        <span style="font-weight:600;font-size:.95rem;">${fmt(item.fiyat*item.adet)}</span>
+        <button class="remove-btn" onclick="removeItem('${item.id}')">Kaldır</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Summary
+  const summaryEl=document.getElementById('summaryItems');
+  summaryEl.innerHTML=cart.map(item=>`
+    <div style="display:flex;justify-content:space-between;margin-bottom:.6rem;">
+      <span style="font-size:.85rem;color:#444748;">${item.isim} <span style="color:#747878;">×${item.adet}</span></span>
+      <span style="font-size:.85rem;font-weight:500;">${fmt(item.fiyat*item.adet)}</span>
+    </div>
+  `).join('');
+
+  // Totals
+  const subtotal=cart.reduce((sum,i)=>sum+i.fiyat*i.adet,0);
+  const kargoUcreti=subtotal>=1000?0:0; // Tüm siparişlere kargo ücretsiz (değiştirilebilir)
+  const total=subtotal+kargoUcreti;
+
+  document.getElementById('subtotal').textContent=fmt(subtotal);
+  document.getElementById('kargo').textContent=kargoUcreti===0?'Ücretsiz':fmt(kargoUcreti);
+  document.getElementById('totalPrice').textContent=fmt(total);
+}
+
+function validateForm(){
+  const fields=[
+    {id:'fAd',label:'Adınızı'},
+    {id:'fSoyad',label:'Soyadınızı'},
+    {id:'fEmail',label:'E-posta adresinizi'},
+    {id:'fTel',label:'Telefon numaranızı'},
+    {id:'fAdres',label:'Adresinizi'},
+    {id:'fIlce',label:'İlçeyi'},
+    {id:'fIl',label:'İli'},
+  ];
+  for(const f of fields){
+    const el=document.getElementById(f.id);
+    if(!el.value.trim()){
+      el.style.borderColor='#ba1a1a';
+      el.focus();
+      alert(`Lütfen ${f.label} girin.`);
+      return null;
+    }
+    el.style.borderColor='#e3e2e0';
+  }
+  return {
+    ad: document.getElementById('fAd').value,
+    soyad: document.getElementById('fSoyad').value,
+    email: document.getElementById('fEmail').value,
+    tel: document.getElementById('fTel').value,
+    adres: document.getElementById('fAdres').value,
+    ilce: document.getElementById('fIlce').value,
+    il: document.getElementById('fIl').value,
+    not: document.getElementById('fNot').value,
+  };
+}
+
+async function startPayment(){
+  const form=validateForm();
+  if(!form)return;
+
+  const cart=getCart();
+  if(!cart.length){alert('Sepetiniz boş!');return;}
+
+  const subtotal=cart.reduce((sum,i)=>sum+i.fiyat*i.adet,0);
+  const total=subtotal;
+
+  const btn=document.getElementById('payBtn');
+  btn.textContent='İşleniyor...';
+  btn.disabled=true;
+
+  // ════════════════════════════════════════════════════════════════
+  // izyco ÖDEME ENTEGRASYONU
+  // izyco merchant ID ve API key aldıktan sonra bu bloğu aktif edin.
+  // Şu an test modunda: konsola yazdırır, gerçek ödeme almaz.
+  // ════════════════════════════════════════════════════════════════
+
+  const orderData = {
+    merchantId: IZYCO_CONFIG.merchantId,
+    amount: total,
+    currency: 'TRY',
+    orderId: 'KD-' + Date.now(),
+    customerName: form.ad + ' ' + form.soyad,
+    customerEmail: form.email,
+    customerPhone: form.tel,
+    billingAddress: form.adres + ', ' + form.ilce + ', ' + form.il,
+    items: cart.map(i=>({name:i.isim, price:i.fiyat, quantity:i.adet})),
+    callbackUrl: IZYCO_CONFIG.callbackUrl,
+    note: form.not,
+  };
+
+  console.log('İşlenecek sipariş:', orderData);
+
+  // Test modunda: Gerçek izyco entegrasyonu olmadığı için simüle et
+  // Gerçek entegrasyon için izyco dökümanını takip edin:
+  // https://izyco.com/developers
+  
+  if(IZYCO_CONFIG.merchantId === 'BURAYA_IZYCO_MERCHANT_ID_GIRIN'){
+    // Test modu — gerçek ödeme yok
+    setTimeout(()=>{
+      showSuccess(form, total);
+    }, 1500);
+  } else {
+    // Gerçek izyco entegrasyonu
+    try {
+      const response = await fetch('https://api.izyco.com/v1/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + IZYCO_CONFIG.apiKey,
+        },
+        body: JSON.stringify(orderData),
+      });
+      const result = await response.json();
+      if(result.paymentUrl){
+        // izyco ödeme sayfasına yönlendir
+        window.location.href = result.paymentUrl;
+      } else {
+        throw new Error('Ödeme URL alınamadı');
+      }
+    } catch(err) {
+      console.error('Ödeme hatası:', err);
+      alert('Ödeme başlatılırken bir hata oluştu. Lütfen tekrar deneyin.');
+      btn.textContent='Güvenli Ödeme Yap';
+      btn.disabled=false;
+    }
+  }
+}
+
+function showSuccess(form, total){
+  document.getElementById('paySection').style.display='none';
+  document.getElementById('successMsg').style.display='block';
+  // Clear cart
+  saveCart([]);
+  updateBadge();
+  // Scroll to top
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function handleResize(){
+  const w=window.innerWidth;
+  const cc=document.getElementById('cartContent');
+  if(cc){
+    if(w<900){cc.style.gridTemplateColumns='1fr';cc.style.gap='2rem';}
+    else{cc.style.gridTemplateColumns='1fr 420px';cc.style.gap='4rem';}
+  }
+  const formGrid=document.querySelector('[style*="grid-template-columns:1fr 1fr"]');
+  if(formGrid&&w<600)formGrid.style.gridTemplateColumns='1fr';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderCart();
+  handleResize();
+  window.addEventListener('resize',handleResize);
+});
+</script>
+</body>
+</html>
