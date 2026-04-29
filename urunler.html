@@ -9,26 +9,41 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
-.serif{font-family:'Noto Serif',serif;}
-.h-lg{font-family:'Noto Serif',serif;font-size:clamp(1.75rem,3vw,2.5rem);font-weight:400;line-height:1.2;}
 .lbl{font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
-.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;transition:color .2s;text-decoration:none;}
-.nav-a:hover,.nav-a.active-cat{color:#1C1C1C;border-bottom:1.5px solid #1C1C1C;padding-bottom:2px;}
+.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;text-decoration:none;transition:color .2s;}
+.nav-a:hover{color:#1C1C1C;}
 .btn-p{background:#1C1C1C;color:#fff;padding:.8rem 2rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;display:inline-block;text-decoration:none;transition:opacity .2s;}
 .btn-p:hover{opacity:.82;}
 .cart-badge{position:absolute;top:-7px;right:-7px;background:#DFB947;color:#1C1C1C;font-size:.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .filter-chip{padding:.45rem 1.1rem;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;color:#555;}
 .filter-chip:hover,.filter-chip.active{background:#1C1C1C;color:#fff;border-color:#1C1C1C;}
+.sort-select{background:#faf9f7;border:1px solid #e3e2e0;padding:.45rem 1rem;font-family:'Manrope',sans-serif;font-size:.72rem;outline:none;cursor:pointer;color:#1C1C1C;}
+
+/* ─── ÜRÜN KARTI ─── */
 .product-card{cursor:pointer;transition:transform .3s;}
 .product-card:hover{transform:translateY(-5px);}
-.product-card img{transition:transform .6s;}
-.product-card:hover img{transform:scale(1.05);}
-.sort-select{background:#faf9f7;border:1px solid #e3e2e0;padding:.45rem 1rem;font-family:'Manrope',sans-serif;font-size:.72rem;outline:none;cursor:pointer;color:#1C1C1C;}
+.card-img-wrap{aspect-ratio:3/4;background:#fff;overflow:hidden;margin-bottom:1.1rem;position:relative;}
+.card-carousel{position:relative;width:100%;height:100%;overflow:hidden;}
+.card-slides{display:flex;width:100%;height:100%;transition:transform .4s cubic-bezier(.4,0,.2,1);will-change:transform;}
+.card-slide{width:100%;min-width:100%;height:100%;flex-shrink:0;overflow:hidden;}
+.card-slide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
+.card-slide img.nb{}
+.product-card:hover .card-slide img{transform:scale(1.04);}
+.card-prev,.card-next{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:5;}
+.card-prev{left:6px;}.card-next{right:6px;}
+.card-prev:hover,.card-next:hover{background:#fff;}
+.product-card:hover .card-prev,.product-card:hover .card-next{display:flex;}
+.card-prev.hidden,.card-next.hidden{display:none !important;}
+.card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:5;}
+.card-dot{width:5px;height:5px;border-radius:50%;background:#1C1C1C;opacity:.2;cursor:pointer;transition:opacity .2s;}
+.card-dot.active{opacity:.85;}
+.card-badge{position:absolute;top:.8rem;left:.8rem;background:#DFB947;color:#1C1C1C;font-family:'Manrope',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;z-index:6;}
+.card-stok-badge{position:absolute;inset:0;background:rgba(250,249,247,.7);display:flex;align-items:center;justify-content:center;z-index:6;}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
+<!-- ══ HEADER ══ -->
 <header style="position:sticky;top:0;z-index:100;background:#faf9f7;border-bottom:1px solid #e3e2e0;">
   <nav style="max-width:1440px;margin:0 auto;padding:1.5rem 4rem;display:flex;justify-content:space-between;align-items:center;">
     <a href="index.html" style="text-decoration:none;line-height:1.1;">
@@ -63,30 +78,29 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
     <a href="urunler.html?kategori=yeni" class="nav-a" style="color:#DFB947;">Yeni Gelenler</a>
   </div>
   <div id="searchBar" style="display:none;background:#f4f3f1;border-top:1px solid #e3e2e0;padding:1rem 4rem;">
-    <input type="text" id="searchInput" placeholder="Ürün ara..." onkeyup="doSearch(this.value)"
+    <input type="text" id="searchInput" placeholder="Ürün ara..." onkeyup="liveSearch(this.value)"
       style="width:100%;background:transparent;border:none;border-bottom:1.5px solid #1C1C1C;outline:none;padding:.5rem 0;font-family:'Manrope',sans-serif;font-size:.95rem;">
   </div>
 </header>
 
-<!-- ═══════════ PAGE HEADER ═══════════ -->
+<!-- Sayfa başlık -->
 <div style="background:#f4f3f1;padding:3rem 4rem;border-bottom:1px solid #e3e2e0;">
   <div style="max-width:1440px;margin:0 auto;">
     <span class="lbl" style="color:#747878;display:block;margin-bottom:.5rem;">
       <a href="index.html" style="color:#747878;text-decoration:none;">Ana Sayfa</a> / Ürünler
     </span>
-    <h1 class="h-lg" id="pageTitle">Tüm Ürünler</h1>
+    <h1 id="pageTitle" style="font-family:'Noto Serif',serif;font-size:clamp(1.75rem,3vw,2.5rem);font-weight:400;line-height:1.2;">Tüm Ürünler</h1>
   </div>
 </div>
 
-<!-- ═══════════ FILTERS + GRID ═══════════ -->
+<!-- ══ FİLTRE + GRID ══ -->
 <div style="max-width:1440px;margin:0 auto;padding:2.5rem 4rem;">
-  <!-- Filter bar -->
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid #e3e2e0;">
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;" id="filterChips">
-      <button class="filter-chip active" onclick="filterBy('')" data-cat="">Tüm Ürünler</button>
+      <button class="filter-chip active" onclick="filterBy('')" data-cat="">Tamamı</button>
       <button class="filter-chip" onclick="filterBy('masalar')" data-cat="masalar">Masalar</button>
-      <button class="filter-chip" onclick="filterBy('raflar')" data-cat="raflar">Tablolar</button>
-      <button class="filter-chip" onclick="filterBy('standlar')" data-cat="standlar">Mutfak Ürünleri</button>
+      <button class="filter-chip" onclick="filterBy('raflar')" data-cat="raflar">Raflar</button>
+      <button class="filter-chip" onclick="filterBy('standlar')" data-cat="standlar">Standlar</button>
       <button class="filter-chip" onclick="filterBy('aksesuarlar')" data-cat="aksesuarlar">Aksesuarlar</button>
       <button class="filter-chip" onclick="filterBy('yeni')" data-cat="yeni">Yeni Gelenler</button>
     </div>
@@ -101,19 +115,14 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
     </div>
   </div>
 
-  <!-- Product Grid -->
-  <div id="productGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;">
-    <!-- JS fills -->
-  </div>
+  <div id="productGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;"></div>
 
-  <!-- Empty state -->
   <div id="emptyState" style="display:none;text-align:center;padding:5rem 0;">
     <p style="font-size:1.2rem;color:#747878;font-family:'Noto Serif',serif;margin-bottom:1rem;">Bu kategoride henüz ürün yok.</p>
     <button class="btn-p" onclick="filterBy('')">Tüm Ürünleri Gör</button>
   </div>
 </div>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer style="background:#faf9f7;border-top:1px solid #e3e2e0;padding:3rem 4rem;margin-top:4rem;">
   <div style="max-width:1440px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
     <a href="index.html" style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#1C1C1C;text-decoration:none;">KESKEEN DESIGN</a>
@@ -121,31 +130,74 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
   </div>
 </footer>
 
-<!-- ═══════════ JAVASCRIPT ═══════════ -->
 <script>
-const DB='keskeenProducts';const CART='keskeenCart';
+const DB='keskeenProducts',CART='keskeenCart';
 const SAMPLE=[
-  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası.',gorselURL:'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80',stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
-  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı.',gorselURL:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80',stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
-  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk.',gorselURL:'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-03'},
-  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı el yapımı orta sehpa.',gorselURL:'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-04'},
+  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası.',gorseller:['https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80'],stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
+  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı.',gorseller:['https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80'],stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
+  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk.',gorseller:['https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80'],stok:true,ozellik:'',tarih:'2025-01-03'},
+  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı el yapımı orta sehpa.',gorseller:['https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80'],stok:true,ozellik:'',tarih:'2025-01-04'},
 ];
-
-function getProducts(){const s=localStorage.getItem(DB);if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}return JSON.parse(s);}
+function getProducts(){
+  const s=localStorage.getItem(DB);
+  if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}
+  return JSON.parse(s).map(p=>{if(!p.gorseller)p.gorseller=p.gorselURL?[p.gorselURL]:[];return p;});
+}
 function getCart(){const s=localStorage.getItem(CART);return s?JSON.parse(s):[];}
 function fmt(n){return n.toLocaleString('tr-TR')+' ₺';}
+function getImgs(p){return(p.gorseller&&p.gorseller.length)?p.gorseller:(p.gorselURL?[p.gorselURL]:[]);}
 
-let allProducts=[];
-let activeCategory='';
-let sortMode='default';
+let allProducts=[],activeCategory='',sortMode='default';
 
 function updateBadge(){
-  const cart=getCart();
-  const n=cart.reduce((a,i)=>a+i.adet,0);
-  const b=document.getElementById('cartBadge');
-  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+  const n=getCart().reduce((a,i)=>a+i.adet,0);
+  const b=document.getElementById('cartBadge');if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
 }
 
+// ─── KART CAROUSEL ───────────────────────────────────────
+function buildCardCarousel(card, images){
+  const slides=card.querySelector('.card-slides');
+  const dotsWrap=card.querySelector('.card-dots');
+  const prevBtn=card.querySelector('.card-prev');
+  const nextBtn=card.querySelector('.card-next');
+
+  slides.innerHTML=images.map((url,i)=>`
+    <div class="card-slide">
+      <img src="${url}" alt="" loading="${i===0?'eager':'lazy'}" onerror="this.classList.add('nb')">
+    </div>`).join('');
+
+  if(images.length>1){
+    dotsWrap.innerHTML=images.map((_,i)=>`<div class="card-dot${i===0?' active':''}" onclick="event.stopPropagation();cardTo(this.closest('.product-card'),${i})"></div>`).join('');
+    dotsWrap.style.display='flex';
+  }else{
+    dotsWrap.style.display='none';
+    prevBtn.classList.add('hidden');
+    nextBtn.classList.add('hidden');
+  }
+
+  prevBtn.addEventListener('click',e=>{e.stopPropagation();cardTo(card,(card._ci-1+images.length)%images.length);});
+  nextBtn.addEventListener('click',e=>{e.stopPropagation();cardTo(card,(card._ci+1)%images.length);});
+
+  // Swipe
+  let tx=0;
+  const wrap=card.querySelector('.card-img-wrap');
+  wrap.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  wrap.addEventListener('touchend',e=>{
+    const d=tx-e.changedTouches[0].clientX;
+    if(Math.abs(d)>35){e.stopPropagation();cardTo(card,d>0?(card._ci+1)%images.length:(card._ci-1+images.length)%images.length);}
+  },{passive:true});
+
+  card._ci=0;
+  card._cl=images.length;
+}
+
+function cardTo(card,idx){
+  card._ci=idx;
+  card.querySelector('.card-slides').style.transform=`translateX(-${idx*100}%)`;
+  card.querySelectorAll('.card-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+// ─── GRID RENDER ─────────────────────────────────────────
 function renderGrid(products){
   const grid=document.getElementById('productGrid');
   const empty=document.getElementById('emptyState');
@@ -153,29 +205,40 @@ function renderGrid(products){
   if(!products.length){grid.innerHTML='';empty.style.display='block';if(count)count.textContent='';return;}
   empty.style.display='none';
   if(count)count.textContent=products.length+' ürün';
-  grid.innerHTML=products.map(p=>`
-    <div class="product-card" onclick="location.href='urun-detay.html?id=${p.id}'">
-      <div style="aspect-ratio:3/4;background:#fff;overflow:hidden;margin-bottom:1.1rem;position:relative;">
-        <img src="${p.gorselURL}" alt="${p.isim}" 
-          style="width:100%;height:100%;object-fit:cover;padding:1.25rem;mix-blend-mode:multiply;transition:transform .6s;"
-          onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
-        ${p.ozellik?`<span class="lbl" style="position:absolute;top:.8rem;left:.8rem;background:#DFB947;color:#1C1C1C;padding:.2rem .6rem;font-size:.55rem;">${p.ozellik}</span>`:''}
-        ${!p.stok?`<div style="position:absolute;inset:0;background:rgba(250,249,247,.7);display:flex;align-items:center;justify-content:center;"><span class="lbl" style="background:#f4f3f1;padding:.4rem .8rem;color:#747878;">Stok Yok</span></div>`:''}
+
+  grid.innerHTML=products.map(p=>{
+    const imgs=getImgs(p);
+    return`<div class="product-card" data-pid="${p.id}" onclick="location.href='urun-detay.html?id=${p.id}'">
+      <div class="card-img-wrap">
+        <div class="card-carousel">
+          <div class="card-slides"></div>
+          <button class="card-prev">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="card-next">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <div class="card-dots"></div>
+        </div>
+        ${p.ozellik?`<div class="card-badge">${p.ozellik}</div>`:''}
+        ${!p.stok?`<div class="card-stok-badge"><span class="lbl" style="background:#f4f3f1;padding:.4rem .8rem;color:#747878;font-size:.6rem;">Stok Yok</span></div>`:''}
       </div>
       <h4 style="font-size:.88rem;font-weight:500;margin-bottom:.35rem;">${p.isim}</h4>
       <p class="lbl" style="color:#747878;">${fmt(p.fiyat)}</p>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+
+  // Carousel kur
+  grid.querySelectorAll('.product-card').forEach((card,i)=>{
+    buildCardCarousel(card, getImgs(products[i]));
+  });
 }
 
 function applyFiltersAndSort(){
   let list=[...allProducts];
   if(activeCategory){
-    if(activeCategory==='yeni'){
-      list=list.filter(p=>p.ozellik&&p.ozellik.toLowerCase().includes('yeni'));
-    }else{
-      list=list.filter(p=>p.kategori===activeCategory);
-    }
+    if(activeCategory==='yeni')list=list.filter(p=>p.ozellik&&p.ozellik.toLowerCase().includes('yeni'));
+    else list=list.filter(p=>p.kategori===activeCategory);
   }
   if(sortMode==='price-asc')list.sort((a,b)=>a.fiyat-b.fiyat);
   else if(sortMode==='price-desc')list.sort((a,b)=>b.fiyat-a.fiyat);
@@ -185,65 +248,38 @@ function applyFiltersAndSort(){
 
 function filterBy(cat){
   activeCategory=cat;
-  document.querySelectorAll('.filter-chip').forEach(c=>{
-    c.classList.toggle('active',c.dataset.cat===cat);
-  });
-  // Update page title
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.dataset.cat===cat));
   const titles={'':'Tüm Ürünler','masalar':'Masalar','raflar':'Raflar','standlar':'Standlar','aksesuarlar':'Aksesuarlar','yeni':'Yeni Gelenler'};
-  const t=document.getElementById('pageTitle');
-  if(t)t.textContent=titles[cat]||'Ürünler';
+  const t=document.getElementById('pageTitle');if(t)t.textContent=titles[cat]||'Ürünler';
   applyFiltersAndSort();
 }
 
-function sortProducts(val){
-  sortMode=val;applyFiltersAndSort();
-}
+function sortProducts(val){sortMode=val;applyFiltersAndSort();}
 
-function toggleSearch(){
-  const b=document.getElementById('searchBar');
-  b.style.display=b.style.display==='none'?'block':'none';
-  if(b.style.display==='block')document.getElementById('searchInput').focus();
-}
-function doSearch(q){
+function liveSearch(q){
   if(!q||q.length<2){applyFiltersAndSort();return;}
   let list=[...allProducts].filter(p=>p.isim.toLowerCase().includes(q.toLowerCase())||p.aciklama.toLowerCase().includes(q.toLowerCase()));
   renderGrid(list);
 }
+
+function toggleSearch(){const b=document.getElementById('searchBar');b.style.display=b.style.display==='none'?'block':'none';if(b.style.display==='block')document.getElementById('searchInput').focus();}
 function toggleMobile(){const n=document.getElementById('mNav');n.style.display=n.style.display==='flex'?'none':'flex';}
 
-// URL param
-function getCatFromURL(){
-  const p=new URLSearchParams(window.location.search);
-  return p.get('kategori')||'';
-}
+function getCatFromURL(){return new URLSearchParams(window.location.search).get('kategori')||'';}
 
 function handleResize(){
   const w=window.innerWidth;
-  const dn=document.getElementById('dNav');
-  const mb=document.getElementById('mBtn');
+  document.getElementById('dNav').style.display=w<900?'none':'flex';
+  document.getElementById('mBtn').style.display=w<900?'block':'none';
   const g=document.getElementById('productGrid');
-  if(w<900){dn.style.display='none';mb.style.display='block';}
-  else{dn.style.display='flex';mb.style.display='none';}
-  if(g){
-    if(w<600)g.style.gridTemplateColumns='repeat(2,1fr)';
-    else if(w<1000)g.style.gridTemplateColumns='repeat(3,1fr)';
-    else g.style.gridTemplateColumns='repeat(4,1fr)';
-  }
+  if(g)g.style.gridTemplateColumns=w<600?'repeat(2,1fr)':w<1000?'repeat(3,1fr)':'repeat(4,1fr)';
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  allProducts=getProducts();
-  updateBadge();
-  const cat=getCatFromURL();
-  filterBy(cat);
-  handleResize();
-  window.addEventListener('resize',handleResize);
-  // Highlight active nav link
-  if(cat){
-    const navMap={'masalar':'nm','raflar':'nr','standlar':'ns','aksesuarlar':'na','yeni':'ny'};
-    const el=document.getElementById(navMap[cat]);
-    if(el){el.style.color='#1C1C1C';el.style.borderBottom='1.5px solid #1C1C1C';}
-  }
+  allProducts=getProducts();updateBadge();
+  const cat=getCatFromURL();filterBy(cat);
+  handleResize();window.addEventListener('resize',handleResize);
+  if(cat){const m={masalar:'nm',raflar:'nr',standlar:'ns',aksesuarlar:'na',yeni:'ny'};const el=document.getElementById(m[cat]);if(el){el.style.color='#1C1C1C';el.style.fontWeight='700';}}
 });
 </script>
 </body>

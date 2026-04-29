@@ -122,6 +122,10 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
           <span style="font-size:.9rem;color:#444748;">Ara Toplam</span>
           <span id="subtotal" style="font-size:.9rem;font-weight:500;"></span>
         </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;" id="kdvRow">
+          <span style="font-size:.85rem;color:#747878;">KDV</span>
+          <span id="kdvTotal" style="font-size:.85rem;color:#747878;"></span>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
           <span style="font-size:.9rem;color:#444748;">Kargo</span>
           <span id="kargo" style="font-size:.9rem;font-weight:500;color:#1a7a1a;"></span>
@@ -160,6 +164,7 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
         <div id="successMsg" style="display:none;text-align:center;padding:1.5rem 0;">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1a7a1a" stroke-width="1.5" style="margin:0 auto 1rem;display:block;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           <h3 style="font-family:'Noto Serif',serif;font-size:1.2rem;margin-bottom:.5rem;">Siparişiniz Alındı!</h3>
+          <p id="successOrderNum" style="font-size:.72rem;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:.08em;color:#747878;margin-bottom:.75rem;"></p>
           <p style="font-size:.85rem;color:#444748;line-height:1.6;">Sipariş onayı e-posta adresinize gönderildi. En kısa sürede hazırlanacaktır.</p>
         </div>
       </div>
@@ -193,19 +198,86 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
 </footer>
 
 <!-- ═══════════ JAVASCRIPT ═══════════ -->
+<!-- EmailJS — ücretsiz e-posta servisi -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 // ════════════════════════════════════════════
-// izyco AYARLARI — BURAYA KENDİ BİLGİLERİNİZİ GİRİN
-// Üye işyeri başvurusu için: https://izyco.com
+// 📧 EMAILJS AYARLARI
+// Kurulum (10 dakika, ücretsiz):
+//   1. https://emailjs.com → Ücretsiz kayıt ol
+//   2. Email Services → Add Service → Gmail'inizi bağlayın
+//   3. Email Templates → Create Template (aşağıda şablon var)
+//   4. Account → Public Key'i kopyalayın
+//   5. Aşağıdaki 3 alanı doldurun
 // ════════════════════════════════════════════
-const IZYCO_CONFIG = {
-  merchantId: 'BURAYA_IZYCO_MERCHANT_ID_GIRIN',   // izyco'dan alacağınız ID
-  apiKey: 'BURAYA_IZYCO_API_KEY_GIRIN',             // izyco API key
-  environment: 'sandbox', // test için 'sandbox', yayın için 'production'
-  callbackUrl: 'BURAYA_SITENIZIN_URL_GIRIN/siparis-basarili.html',
-  // izyco API endpoint: https://api.izyco.com/v1/payment
+const EMAILJS = {
+  publicKey:    'rzTuuPi0TEu5c_6fk',
+  serviceId:    'service_3a90f66',
+  templateId:   'template_xaq0xdm',        // Sana gelen sipariş bildirimi
+  musteriTpl:   'template_rk9twwf',
+  // ↑ EmailJS'deki hazır "Order Confirmation" şablonunun ID'sini buraya yaz
+  // EmailJS → Email Templates → o şablonu aç → Template ID'yi kopyala
+  siparişEmail: 'keskeendesign@gmail.com',
 };
+
+// EmailJS başlat
+emailjs.init(EMAILJS.publicKey);
+
 // ════════════════════════════════════════════
+// 📋 MÜŞTERİ ONAY MAİLİ ŞABLONU
+// EmailJS → New Template → aşağıdaki içeriği yapıştır:
+//
+// Konu: ✅ Siparişiniz Alındı — {{order_id}}
+//
+// Sayın {{musteri_ad}},
+// Siparişiniz başarıyla alınmıştır!
+//
+// ─── SİPARİŞ DETAYI ───
+// {{siparis_urunler}}
+//
+// TOPLAM: {{siparis_toplam}}
+// Sipariş No : {{order_id}}
+// Tarih      : {{siparis_tarihi}}
+//
+// En kısa sürede hazırlayıp kargoya vereceğiz.
+// Sorularınız için: keskeendesign@gmail.com
+//
+// Teşekkürler,
+// Keskeen Design
+// ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// 📋 EmailJS ŞABLON İÇERİĞİ (Template oluştururken yapıştırın):
+//
+// Konu: 🛒 Yeni Sipariş — {{order_id}} — {{musteri_ad}}
+//
+// Merhaba,
+// Yeni bir sipariş alındı!
+//
+// ─── MÜŞTERİ BİLGİLERİ ───
+// Ad Soyad : {{musteri_ad}}
+// Telefon  : {{musteri_tel}}
+// E-posta  : {{musteri_email}}
+// Adres    : {{musteri_adres}}
+//
+// ─── SİPARİŞ ───
+// {{siparis_urunler}}
+//
+// ─── TOPLAM ───
+// {{siparis_toplam}}
+//
+// Sipariş No : {{order_id}}
+// Tarih      : {{siparis_tarihi}}
+//
+// Not: {{musteri_not}}
+// ════════════════════════════════════════════
+
+// izyco AYARLARI
+const IZYCO_CONFIG = {
+  merchantId: 'BURAYA_IZYCO_MERCHANT_ID_GIRIN',
+  apiKey: 'BURAYA_IZYCO_API_KEY_GIRIN',
+  environment: 'sandbox',
+  callbackUrl: 'BURAYA_SITENIZIN_URL_GIRIN/siparis-basarili.html',
+};
 
 const CART='keskeenCart';
 
@@ -285,11 +357,23 @@ function renderCart(){
 
   // Totals
   const subtotal=cart.reduce((sum,i)=>sum+i.fiyat*i.adet,0);
-  const kargoUcreti=subtotal>=1000?0:0; // Tüm siparişlere kargo ücretsiz (değiştirilebilir)
+  // KDV hesabı — her ürünün kendi KDV oranına göre
+  const totalKDV=cart.reduce((sum,i)=>{
+    const oran=i.kdvOrani||0;
+    const kdv=i.fiyat*i.adet*oran/(100+oran);
+    return sum+kdv;
+  },0);
+  const kargoUcreti=0;
   const total=subtotal+kargoUcreti;
 
   document.getElementById('subtotal').textContent=fmt(subtotal);
-  document.getElementById('kargo').textContent=kargoUcreti===0?'Ücretsiz':fmt(kargoUcreti);
+  if(totalKDV>0){
+    document.getElementById('kdvTotal').textContent=fmt(totalKDV);
+    document.getElementById('kdvRow').style.display='flex';
+  }else{
+    document.getElementById('kdvRow').style.display='none';
+  }
+  document.getElementById('kargo').textContent='Ücretsiz';
   document.getElementById('totalPrice').textContent=fmt(total);
 }
 
@@ -325,6 +409,84 @@ function validateForm(){
   };
 }
 
+// ─── SİPARİŞ KAYDET ────────────────────────────────────────
+const ORDERS_KEY = 'keskeenOrders';
+
+function saveOrder(form, cart, total, orderId){
+  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  orders.unshift({
+    id:        orderId,
+    tarih:     new Date().toISOString(),
+    durum:     'yeni',         // yeni / hazirlaniyor / kargoda / teslim
+    musteri: {
+      ad:      form.ad + ' ' + form.soyad,
+      tel:     form.tel,
+      email:   form.email,
+      adres:   form.adres + ', ' + form.ilce + '/' + form.il,
+      not:     form.not || '',
+    },
+    urunler:   cart.map(i => ({isim:i.isim, adet:i.adet, fiyat:i.fiyat})),
+    toplam:    total,
+    goruldu:   false,
+  });
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+
+// ─── E-POSTA BİLDİRİMLERİ ──────────────────────────────────
+async function sendOrderEmail(form, cart, total, orderId, totalKDV){
+  const urunler = cart.map(i =>
+    `• ${i.isim}  x${i.adet}  →  ${(i.fiyat * i.adet).toLocaleString('tr-TR')} TL`
+  ).join('\n');
+  const params = {
+    order_id:        orderId,
+    musteri_ad:      form.ad + ' ' + form.soyad,
+    musteri_tel:     form.tel,
+    musteri_email:   form.email,
+    musteri_adres:   form.adres + ', ' + form.ilce + '/' + form.il,
+    siparis_urunler: urunler,
+    siparis_toplam:  total.toLocaleString('tr-TR') + ' TL',
+    siparis_tarihi:  new Date().toLocaleString('tr-TR'),
+    musteri_not:     form.not || '—',
+  };
+
+  // 1. Sana gelen bildirim
+  try {
+    await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
+      ...params, to_email: EMAILJS.siparişEmail,
+    });
+    console.log('✓ Satıcı bildirimi gönderildi');
+  } catch(e){ console.error('Satıcı maili gönderilemedi:', e); }
+
+  // 2. Müşteriye giden onay maili — EmailJS hazır "Order Confirmation" şablonu
+  if(EMAILJS.musteriTpl && EMAILJS.musteriTpl !== 'template_musteri'){
+    try {
+      const result = await emailjs.send(EMAILJS.serviceId, EMAILJS.musteriTpl, {
+        to_email:  form.email,
+        order_id:  orderId,
+        // orders döngüsü — şablonun {{#orders}} bloğu için
+        orders: cart.map(i => ({
+          name:  i.isim,
+          price: (i.fiyat * i.adet).toLocaleString('tr-TR') + ' ₺',
+          units: i.adet,
+          // Resim: sadece http URL'ler maillerde çalışır (base64 çalışmaz)
+          image: (i.gorselURL && i.gorselURL.startsWith('http')) ? i.gorselURL : '',
+        })),
+        // Maliyet özeti — şablonun {{cost.x}} değişkenleri için
+        cost: {
+          shipping: 'Ücretsiz',
+          tax:      totalKDV > 0 ? totalKDV.toLocaleString('tr-TR', {maximumFractionDigits:2}) + ' ₺ (dahil)' : '—',
+          total:    total.toLocaleString('tr-TR') + ' ₺',
+        },
+        musteri_ad:    form.ad + ' ' + form.soyad,
+        musteri_adres: form.adres + ', ' + form.ilce + '/' + form.il,
+      });
+      console.log('✓ Müşteri onay maili gönderildi. Status:', result.status, result.text);
+    } catch(e){
+      console.error('✗ Müşteri maili gönderilemedi:', e);
+    }
+  }
+}
+
 async function startPayment(){
   const form=validateForm();
   if(!form)return;
@@ -333,6 +495,7 @@ async function startPayment(){
   if(!cart.length){alert('Sepetiniz boş!');return;}
 
   const subtotal=cart.reduce((sum,i)=>sum+i.fiyat*i.adet,0);
+  const totalKDV=cart.reduce((sum,i)=>{const o=i.kdvOrani||0;return sum+i.fiyat*i.adet*o/(100+o);},0);
   const total=subtotal;
 
   const btn=document.getElementById('payBtn');
@@ -345,11 +508,12 @@ async function startPayment(){
   // Şu an test modunda: konsola yazdırır, gerçek ödeme almaz.
   // ════════════════════════════════════════════════════════════════
 
+  const orderId = 'KD-' + Date.now();
   const orderData = {
     merchantId: IZYCO_CONFIG.merchantId,
     amount: total,
     currency: 'TRY',
-    orderId: 'KD-' + Date.now(),
+    orderId: orderId,
     customerName: form.ad + ' ' + form.soyad,
     customerEmail: form.email,
     customerPhone: form.tel,
@@ -366,9 +530,10 @@ async function startPayment(){
   // https://izyco.com/developers
   
   if(IZYCO_CONFIG.merchantId === 'BURAYA_IZYCO_MERCHANT_ID_GIRIN'){
-    // Test modu — gerçek ödeme yok
     setTimeout(()=>{
-      showSuccess(form, total);
+      saveOrder(form, cart, total, orderId);
+      sendOrderEmail(form, cart, total, orderId, totalKDV);
+      showSuccess(form, total, orderId);
     }, 1500);
   } else {
     // Gerçek izyco entegrasyonu
@@ -397,13 +562,15 @@ async function startPayment(){
   }
 }
 
-function showSuccess(form, total){
+function showSuccess(form, total, orderId){
   document.getElementById('paySection').style.display='none';
-  document.getElementById('successMsg').style.display='block';
-  // Clear cart
+  const msg=document.getElementById('successMsg');
+  msg.style.display='block';
+  // Sipariş numarasını göster
+  const orderNumEl=document.getElementById('successOrderNum');
+  if(orderNumEl&&orderId)orderNumEl.textContent='Sipariş No: '+orderId;
   saveCart([]);
   updateBadge();
-  // Scroll to top
   window.scrollTo({top:0,behavior:'smooth'});
 }
 

@@ -3,32 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ürün Detay | KESKEEN DESIGN</title>
+<title>Ürün | KESKEEN DESIGN</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
 .lbl{font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
-.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;transition:color .2s;text-decoration:none;}
+.nav-a{font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#555;text-decoration:none;transition:color .2s;}
 .nav-a:hover{color:#1C1C1C;}
 .btn-p{background:#1C1C1C;color:#fff;padding:1rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;transition:opacity .2s;width:100%;}
 .btn-p:hover{opacity:.82;}
-.btn-o{background:transparent;color:#1C1C1C;padding:.85rem 2.5rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid #1C1C1C;cursor:pointer;transition:all .2s;width:100%;}
+.btn-o{background:transparent;color:#1C1C1C;padding:.85rem;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid #1C1C1C;cursor:pointer;transition:all .2s;width:100%;}
 .btn-o:hover{background:#1C1C1C;color:#fff;}
 .cart-badge{position:absolute;top:-7px;right:-7px;background:#DFB947;color:#1C1C1C;font-size:.55rem;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.qty-btn{width:36px;height:36px;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.qty-btn{width:36px;height:36px;border:1px solid #e3e2e0;background:#fff;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;font-family:'Manrope',sans-serif;}
 .qty-btn:hover{background:#f4f3f1;}
-.related-card{cursor:pointer;transition:transform .3s;}
-.related-card:hover{transform:translateY(-5px);}
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1C1C1C;color:#fff;padding:1rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.82rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.related-card{cursor:pointer;}
 .related-card img{transition:transform .6s;}
 .related-card:hover img{transform:scale(1.05);}
-.toast{position:fixed;bottom:2rem;right:2rem;background:#1C1C1C;color:#fff;padding:1rem 1.5rem;font-family:'Manrope',sans-serif;font-size:.82rem;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.related-card:hover{transform:translateY(-5px);}
+
+/* ─── CAROUSEL ─── */
+#carousel{position:relative;aspect-ratio:4/5;background:#fff;overflow:hidden;user-select:none;}
+#carouselTrack{display:flex;width:100%;height:100%;transition:transform .42s cubic-bezier(.4,0,.2,1);will-change:transform;}
+.carousel-slide{width:100%;min-width:100%;height:100%;flex-shrink:0;overflow:hidden;}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.carousel-slide img.no-blend{}
+
+/* Arrow buttons */
+.car-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;background:rgba(255,255,255,.92);border:1px solid #e3e2e0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10;backdrop-filter:blur(4px);}
+.car-arrow:hover{background:#fff;border-color:#1C1C1C;}
+#carPrev{left:12px;}
+#carNext{right:12px;}
+
+/* Dots */
+#carDots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;}
+.dot{width:6px;height:6px;border-radius:50%;background:#1C1C1C;opacity:.2;cursor:pointer;transition:opacity .2s,transform .2s;}
+.dot.active{opacity:1;transform:scale(1.3);}
+
+/* Thumbnail strip */
+#thumbStrip{display:flex;gap:.5rem;margin-top:.75rem;overflow-x:auto;padding-bottom:.25rem;}
+#thumbStrip::-webkit-scrollbar{height:3px;}
+#thumbStrip::-webkit-scrollbar-track{background:#f4f3f1;}
+#thumbStrip::-webkit-scrollbar-thumb{background:#c4c7c7;}
+.thumb{width:68px;height:68px;flex-shrink:0;cursor:pointer;object-fit:cover;border:2px solid transparent;transition:border-color .2s;background:#fff;}
+.thumb:hover{border-color:#c4c7c7;}
+.thumb.active{border-color:#1C1C1C;}
+.thumb.no-blend{}
+
+/* Swipe counter badge */
+#slideCounter{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff;font-family:'Manrope',sans-serif;font-size:.6rem;font-weight:600;padding:3px 8px;z-index:10;display:none;}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
+<!-- ══ HEADER ══ -->
 <header style="position:sticky;top:0;z-index:100;background:#faf9f7;border-bottom:1px solid #e3e2e0;">
   <nav style="max-width:1440px;margin:0 auto;padding:1.5rem 4rem;display:flex;justify-content:space-between;align-items:center;">
     <a href="index.html" style="text-decoration:none;line-height:1.1;">
@@ -61,95 +92,98 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
   </div>
 </header>
 
-<!-- ═══════════ BREADCRUMB ═══════════ -->
+<!-- Breadcrumb -->
 <div style="max-width:1440px;margin:0 auto;padding:1.25rem 4rem;">
   <span class="lbl" style="color:#747878;font-size:.62rem;">
-    <a href="index.html" style="color:#747878;text-decoration:none;">Ana Sayfa</a>
-    <span style="margin:0 .5rem;">/</span>
-    <a href="urunler.html" style="color:#747878;text-decoration:none;">Ürünler</a>
-    <span style="margin:0 .5rem;">/</span>
+    <a href="index.html" style="color:#747878;text-decoration:none;">Ana Sayfa</a> /
+    <a href="urunler.html" style="color:#747878;text-decoration:none;">Ürünler</a> /
     <span id="breadName" style="color:#1C1C1C;"></span>
   </span>
 </div>
 
-<!-- ═══════════ PRODUCT DETAIL ═══════════ -->
+<!-- ══ ÜRÜN DETAY ══ -->
 <div id="productDetail" style="max-width:1440px;margin:0 auto;padding:1rem 4rem 5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
-  <!-- Left: Images -->
+
+  <!-- SOL: CAROUSEL -->
   <div>
-    <div id="mainImgWrap" style="aspect-ratio:4/5;background:#fff;overflow:hidden;margin-bottom:1rem;">
-      <img id="mainImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;padding:2.5rem;mix-blend-mode:multiply;transition:transform .5s;"
-        onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
+    <!-- Ana carousel -->
+    <div id="carousel">
+      <div id="carouselTrack"></div>
+
+      <!-- Ok butonları -->
+      <button class="car-arrow" id="carPrev" onclick="carMove(-1)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="car-arrow" id="carNext" onclick="carMove(1)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+
+      <!-- Dot göstergeler -->
+      <div id="carDots"></div>
+
+      <!-- Sayaç -->
+      <div id="slideCounter"></div>
     </div>
-    <!-- Thumbnail strip (show if product has gallery) -->
-    <div id="thumbStrip" style="display:flex;gap:.5rem;"></div>
+
+    <!-- Thumbnail strip -->
+    <div id="thumbStrip"></div>
   </div>
 
-  <!-- Right: Info -->
-  <div style="padding-top:1rem;">
+  <!-- SAĞ: BİLGİLER -->
+  <div style="padding-top:.5rem;">
     <span class="lbl" id="productCategory" style="color:#747878;display:block;margin-bottom:.75rem;"></span>
     <h1 id="productName" style="font-family:'Noto Serif',serif;font-size:2.25rem;font-weight:400;line-height:1.2;margin-bottom:1rem;"></h1>
-    
+
     <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;">
-      <span id="productPrice" style="font-family:'Manrope',sans-serif;font-size:1.4rem;font-weight:600;color:#1C1C1C;"></span>
+      <span id="productPrice" style="font-size:1.4rem;font-weight:600;"></span>
       <span id="stockBadge" class="lbl" style="font-size:.58rem;padding:.25rem .6rem;"></span>
     </div>
 
     <p id="productDesc" style="color:#444748;line-height:1.8;font-size:.95rem;margin-bottom:2rem;"></p>
 
-    <!-- Features -->
-    <div id="productFeatures" style="margin-bottom:2rem;padding:1.5rem;background:#f4f3f1;border-left:3px solid #DFB947;display:none;">
-      <p class="lbl" style="margin-bottom:.75rem;font-size:.62rem;">Ürün Özellikleri</p>
-      <p id="featuresText" style="font-size:.88rem;line-height:1.7;color:#444748;"></p>
+    <div id="ozellikBox" style="display:none;margin-bottom:2rem;padding:1.25rem 1.5rem;background:#f4f3f1;border-left:3px solid #DFB947;">
+      <p class="lbl" style="margin-bottom:.5rem;font-size:.6rem;">Ürün Etiketi</p>
+      <p id="ozellikText" style="font-size:.88rem;color:#444748;"></p>
     </div>
 
-    <!-- Quantity -->
+    <!-- Adet -->
     <div style="margin-bottom:1.5rem;">
       <p class="lbl" style="color:#747878;margin-bottom:.75rem;font-size:.62rem;">Adet</p>
-      <div style="display:flex;align-items:center;gap:0;">
+      <div style="display:flex;align-items:center;">
         <button class="qty-btn" onclick="changeQty(-1)">−</button>
-        <div style="width:52px;height:36px;border-top:1px solid #e3e2e0;border-bottom:1px solid #e3e2e0;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:600;" id="qtyDisplay">1</div>
+        <div style="width:52px;height:36px;border-top:1px solid #e3e2e0;border-bottom:1px solid #e3e2e0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.9rem;" id="qtyDisplay">1</div>
         <button class="qty-btn" onclick="changeQty(1)">+</button>
       </div>
     </div>
 
-    <!-- Buttons -->
-    <div id="buyBtns" style="display:flex;flex-direction:column;gap:.75rem;">
+    <!-- Butonlar -->
+    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;">
       <button class="btn-p" onclick="addToCart()" id="addBtn">Sepete Ekle</button>
       <a href="sepet.html" class="btn-o" style="text-align:center;text-decoration:none;" onclick="addToCart()">Hemen Satın Al</a>
     </div>
 
-    <!-- Divider -->
-    <div style="border-top:1px solid #e3e2e0;margin:2rem 0;"></div>
+    <div style="border-top:1px solid #e3e2e0;"></div>
 
-    <!-- Info accordion -->
+    <!-- Accordion -->
     <div>
-      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('kargo')">
-        <span class="lbl" style="font-size:.65rem;">Kargo & Teslimat</span>
-        <span id="kargoArrow" style="transition:transform .3s;">+</span>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;" onclick="toggleAcc('kargo')">
+        <span class="lbl" style="font-size:.65rem;">Kargo & Teslimat</span><span id="kArrow">+</span>
       </div>
-      <div id="kargoInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
-        Siparişler 2–5 iş günü içinde hazırlanır ve kargoya verilir. El yapımı ürünler için stok durumuna göre 1–2 hafta sürebilir. Türkiye geneline kargo ücretsizdir (1000 ₺ ve üzeri siparişlerde).
+      <div id="kargoInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.8;white-space:pre-line;"></div>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;" onclick="toggleAcc('iade')">
+        <span class="lbl" style="font-size:.65rem;">İade & Değişim</span><span id="iArrow">+</span>
       </div>
-      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('iade')">
-        <span class="lbl" style="font-size:.65rem;">İade & Değişim</span>
-        <span id="iadeArrow" style="transition:transform .3s;">+</span>
+      <div id="iadeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.8;white-space:pre-line;"></div>
+      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;" onclick="toggleAcc('malzeme')">
+        <span class="lbl" style="font-size:.65rem;">Malzeme & Bakım</span><span id="mArrow">+</span>
       </div>
-      <div id="iadeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
-        Ürünü teslim aldığınızdan itibaren 14 gün içinde iade edebilirsiniz. El yapımı ürünlerde küçük farklılıklar doğaldır ve kusur sayılmaz. İade için info@keskeendesign.com adresine yazın.
-      </div>
-      <div style="border-bottom:1px solid #e3e2e0;padding:.9rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onclick="toggleInfo('malzeme')">
-        <span class="lbl" style="font-size:.65rem;">Malzeme & Bakım</span>
-        <span id="malzemeArrow" style="transition:transform .3s;">+</span>
-      </div>
-      <div id="malzemeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.7;">
-        Tüm ürünlerimiz doğal, FSC sertifikalı ahşaptan üretilmektedir. Gıda ile temas eden ürünler doğal bitkisel yağ ile bitirilmiştir. Nemden uzak tutun, 3 ayda bir zeytinyağı ile bakım yapın.
-      </div>
+      <div id="malzemeInfo" style="display:none;padding:.75rem 0 1rem;color:#444748;font-size:.88rem;line-height:1.8;white-space:pre-line;"></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ RELATED PRODUCTS ═══════════ -->
-<section style="background:#f4f3f1;padding:4rem 0;">
+<!-- ══ BENZER ÜRÜNLER ══ -->
+<section id="relatedSection" style="background:#f4f3f1;padding:4rem 0;">
   <div style="max-width:1440px;margin:0 auto;padding:0 4rem;">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;">
       <h2 style="font-family:'Noto Serif',serif;font-size:1.75rem;font-weight:400;">Benzer Ürünler</h2>
@@ -159,7 +193,6 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
   </div>
 </section>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer style="background:#faf9f7;border-top:1px solid #e3e2e0;padding:3rem 4rem;">
   <div style="max-width:1440px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;">
     <a href="index.html" style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#1C1C1C;text-decoration:none;">KESKEEN DESIGN</a>
@@ -167,64 +200,94 @@ body{background:#faf9f7;color:#1C1C1C;font-family:'Manrope',sans-serif;}
   </div>
 </footer>
 
-<!-- Toast -->
 <div class="toast" id="toast">✓ Sepete eklendi</div>
 
-<!-- ═══════════ JAVASCRIPT ═══════════ -->
 <script>
-const DB='keskeenProducts';const CART='keskeenCart';
+const DB='keskeenProducts',CART='keskeenCart';
 const SAMPLE=[
-  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası. Her parça kendi içinde özgündür.',gorselURL:'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80',stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
-  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı. Demir askı sistemi dahildir.',gorselURL:'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80',stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
-  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk. Minimalist tasarım.',gorselURL:'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-03'},
-  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı üst, meşe ahşabı ayaklı el yapımı orta sehpa.',gorselURL:'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80',stok:true,ozellik:'',tarih:'2025-01-04'},
+  {id:'p1',isim:'Meşe Servis Tahtası',fiyat:450,kategori:'aksesuarlar',aciklama:'Doğal meşe ahşabından el yapımı servis tahtası.',gorseller:['https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&q=80'],stok:true,ozellik:'Yeni Geldi',tarih:'2025-01-01'},
+  {id:'p2',isim:'Ceviz Duvar Rafı',fiyat:850,kategori:'raflar',aciklama:'Masif ceviz ahşabından el yapımı duvar rafı.',gorseller:['https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=600&q=80'],stok:true,ozellik:'Öne Çıkan',tarih:'2025-01-02'},
+  {id:'p3',isim:'Gürgen Mumluk',fiyat:280,kategori:'aksesuarlar',aciklama:'Tornada işlenmiş gürgen mumluk.',gorseller:['https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&q=80'],stok:true,ozellik:'',tarih:'2025-01-03'},
+  {id:'p4',isim:'Ceviz Orta Sehpa',fiyat:2800,kategori:'masalar',aciklama:'Masif ceviz ahşabı el yapımı orta sehpa.',gorseller:['https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80'],stok:true,ozellik:'',tarih:'2025-01-04'},
 ];
-
-function getProducts(){const s=localStorage.getItem(DB);if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}return JSON.parse(s);}
+function getProducts(){const s=localStorage.getItem(DB);if(!s){localStorage.setItem(DB,JSON.stringify(SAMPLE));return SAMPLE;}return JSON.parse(s).map(p=>{if(!p.gorseller)p.gorseller=p.gorselURL?[p.gorselURL]:[];return p;});}
 function getCart(){const s=localStorage.getItem(CART);return s?JSON.parse(s):[];}
 function saveCart(c){localStorage.setItem(CART,JSON.stringify(c));}
 function fmt(n){return n.toLocaleString('tr-TR')+' ₺';}
+function getImgs(p){return(p.gorseller&&p.gorseller.length)?p.gorseller:(p.gorselURL?[p.gorselURL]:[]);}
 
-let currentProduct=null;
-let qty=1;
+let currentProduct=null,qty=1,carIdx=0,carImgs=[];
 
-function updateBadge(){
-  const cart=getCart();
-  const n=cart.reduce((a,i)=>a+i.adet,0);
-  const b=document.getElementById('cartBadge');
-  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+// ─── CAROUSEL ────────────────────────────────────────────
+function buildCarousel(images){
+  carImgs=images;carIdx=0;
+  const track=document.getElementById('carouselTrack');
+  const dots=document.getElementById('carDots');
+  const thumbs=document.getElementById('thumbStrip');
+  const counter=document.getElementById('slideCounter');
+  const prevBtn=document.getElementById('carPrev');
+  const nextBtn=document.getElementById('carNext');
+
+  // Slides
+  track.innerHTML=images.map((url,i)=>`
+    <div class="carousel-slide">
+      <img src="${url}" alt="Görsel ${i+1}" onerror="this.classList.add('no-blend')">
+    </div>`).join('');
+
+  // Dots (sadece birden fazla görsel varsa)
+  if(images.length>1){
+    dots.innerHTML=images.map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="goTo(${i})"></div>`).join('');
+    dots.style.display='flex';
+    counter.textContent='1 / '+images.length;
+    counter.style.display='block';
+    prevBtn.style.display='flex';nextBtn.style.display='flex';
+  }else{
+    dots.style.display='none';counter.style.display='none';
+    prevBtn.style.display='none';nextBtn.style.display='none';
+  }
+
+  // Thumbnails
+  thumbs.innerHTML=images.map((url,i)=>`
+    <img class="thumb${i===0?' active':''}" src="${url}" alt="" onclick="goTo(${i})" 
+      onerror="this.classList.add('no-blend')">`).join('');
+  thumbs.style.display=images.length>1?'flex':'none';
+
+  // Swipe support
+  let tx=0;
+  const car=document.getElementById('carousel');
+  car.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+  car.addEventListener('touchend',e=>{const diff=tx-e.changedTouches[0].clientX;if(Math.abs(diff)>40)carMove(diff>0?1:-1);},{passive:true});
+
+  goTo(0);
 }
 
-function changeQty(delta){
-  qty=Math.max(1,qty+delta);
-  document.getElementById('qtyDisplay').textContent=qty;
+function goTo(idx){
+  carIdx=Math.max(0,Math.min(idx,carImgs.length-1));
+  document.getElementById('carouselTrack').style.transform=`translateX(-${carIdx*100}%)`;
+
+  // Dots
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===carIdx));
+
+  // Thumbs
+  document.querySelectorAll('.thumb').forEach((t,i)=>{
+    t.classList.toggle('active',i===carIdx);
+    if(i===carIdx)t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  });
+
+  // Counter
+  const c=document.getElementById('slideCounter');
+  if(c.style.display!=='none')c.textContent=(carIdx+1)+' / '+carImgs.length;
 }
 
-function addToCart(){
-  if(!currentProduct||!currentProduct.stok)return;
-  let cart=getCart();
-  const existing=cart.find(i=>i.id===currentProduct.id);
-  if(existing){existing.adet+=qty;}
-  else{cart.push({id:currentProduct.id,isim:currentProduct.isim,fiyat:currentProduct.fiyat,adet:qty,gorselURL:currentProduct.gorselURL});}
-  saveCart(cart);
-  updateBadge();
-  showToast();
-}
+function carMove(dir){goTo(carIdx+dir);}
 
-function showToast(){
-  const t=document.getElementById('toast');
-  t.style.opacity='1';
-  setTimeout(()=>t.style.opacity='0',2500);
-}
+// Keyboard navigation
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')carMove(-1);
+  if(e.key==='ArrowRight')carMove(1);
+});
 
-function toggleInfo(key){
-  const el=document.getElementById(key+'Info');
-  const arrow=document.getElementById(key+'Arrow');
-  const open=el.style.display==='block';
-  el.style.display=open?'none':'block';
-  arrow.style.transform=open?'rotate(0)':'rotate(45deg)';
-}
-
+// ─── ÜRÜN ────────────────────────────────────────────────
 function renderProduct(p){
   currentProduct=p;
   document.title=p.isim+' | KESKEEN DESIGN';
@@ -233,81 +296,85 @@ function renderProduct(p){
   document.getElementById('productName').textContent=p.isim;
   document.getElementById('productPrice').textContent=fmt(p.fiyat);
   document.getElementById('productDesc').textContent=p.aciklama;
-  document.getElementById('mainImg').src=p.gorselURL;
-  document.getElementById('mainImg').alt=p.isim;
 
-  // Stock badge
   const sb=document.getElementById('stockBadge');
-  if(p.stok){
-    sb.textContent='Stokta Var';
-    sb.style.background='#f4f3f1';
-    sb.style.color='#444';
-  }else{
-    sb.textContent='Stok Yok';
-    sb.style.background='#ffdad6';
-    sb.style.color='#93000a';
-    document.getElementById('addBtn').disabled=true;
-    document.getElementById('addBtn').style.opacity='.4';
-    document.getElementById('addBtn').style.cursor='not-allowed';
-  }
+  if(p.stok){sb.textContent='Stokta Var';sb.style.background='#f4f3f1';sb.style.color='#444';}
+  else{sb.textContent='Stok Yok';sb.style.background='#ffdad6';sb.style.color='#93000a';
+    const ab=document.getElementById('addBtn');ab.disabled=true;ab.style.opacity='.4';ab.style.cursor='not-allowed';}
 
-  // Optional: ozellik as feature
-  if(p.ozellik){
-    document.getElementById('productFeatures').style.display='block';
-    document.getElementById('featuresText').textContent=p.ozellik;
-  }
+  if(p.ozellik){document.getElementById('ozellikBox').style.display='block';document.getElementById('ozellikText').textContent=p.ozellik;}
+
+  // Accordion metinleri — ürüne özel varsa onu, yoksa settings'deki varsayılanı kullan
+  const def=(JSON.parse(localStorage.getItem('keskeenSettings')||'{}')).defaults||{};
+  document.getElementById('kargoInfo').textContent=p.kargo||def.kargo||'2–5 iş günü içinde kargoya verilir. 1000 ₺ ve üzeri kargo ücretsiz.';
+  document.getElementById('iadeInfo').textContent=p.iade||def.iade||'Teslimattan itibaren 14 gün içinde iade hakkınız vardır.';
+  document.getElementById('malzemeInfo').textContent=p.malzeme||def.malzeme||'Doğal ahşaptan üretilmiştir. Nemden uzak tutun.';
+
+  buildCarousel(getImgs(p));
 }
 
 function renderRelated(p){
   const all=getProducts();
   const related=all.filter(x=>x.kategori===p.kategori&&x.id!==p.id).slice(0,4);
   const grid=document.getElementById('relatedGrid');
-  if(!related.length){grid.parentElement.parentElement.style.display='none';return;}
-  grid.innerHTML=related.map(r=>`
-    <div class="related-card" onclick="location.href='urun-detay.html?id=${r.id}'">
+  const section=document.getElementById('relatedSection');
+  if(!related.length){section.style.display='none';return;}
+  grid.innerHTML=related.map(r=>{
+    const imgs=getImgs(r);
+    return`<div class="related-card" onclick="location.href='urun-detay.html?id=${r.id}'" style="transition:transform .3s;">
       <div style="aspect-ratio:3/4;background:#fff;overflow:hidden;margin-bottom:1rem;">
-        <img src="${r.gorselURL}" alt="${r.isim}" style="width:100%;height:100%;object-fit:cover;padding:1.25rem;mix-blend-mode:multiply;transition:transform .6s;" onerror="this.style.padding='0';this.style.mixBlendMode='normal'">
+        <img src="${imgs[0]||''}" alt="${r.isim}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;">
       </div>
       <h4 style="font-size:.88rem;font-weight:500;margin-bottom:.35rem;">${r.isim}</h4>
       <p class="lbl" style="color:#747878;">${fmt(r.fiyat)}</p>
-    </div>
-  `).join('');
+    </div>`;}).join('');
+}
+
+// ─── SEPET ───────────────────────────────────────────────
+function updateBadge(){const cart=getCart();const n=cart.reduce((a,i)=>a+i.adet,0);const b=document.getElementById('cartBadge');if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}}
+function changeQty(d){qty=Math.max(1,qty+d);document.getElementById('qtyDisplay').textContent=qty;}
+function addToCart(){
+  if(!currentProduct||!currentProduct.stok)return;
+  let cart=getCart();
+  const imgs=getImgs(currentProduct);
+  const ex=cart.find(i=>i.id===currentProduct.id);
+  if(ex)ex.adet+=qty;
+  else cart.push({id:currentProduct.id,isim:currentProduct.isim,fiyat:currentProduct.fiyat,kdvOrani:currentProduct.kdvOrani||0,adet:qty,gorselURL:imgs[0]||''});
+  saveCart(cart);updateBadge();
+  const t=document.getElementById('toast');t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500);
+}
+
+// ─── ACCORDION ───────────────────────────────────────────
+function toggleAcc(key){
+  const el=document.getElementById(key+'Info');
+  const arrowMap={kargo:'kArrow',iade:'iArrow',malzeme:'mArrow'};
+  const arrow=document.getElementById(arrowMap[key]);
+  const open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  arrow.style.transform=open?'rotate(0)':'rotate(45deg)';
 }
 
 function toggleMobile(){const n=document.getElementById('mNav');n.style.display=n.style.display==='flex'?'none':'flex';}
 
 function handleResize(){
   const w=window.innerWidth;
-  const dn=document.getElementById('dNav');
-  const mb=document.getElementById('mBtn');
-  const detail=document.getElementById('productDetail');
+  const dn=document.getElementById('dNav');const mb=document.getElementById('mBtn');
+  if(w<900){dn.style.display='none';mb.style.display='block';}else{dn.style.display='flex';mb.style.display='none';}
+  const det=document.getElementById('productDetail');
+  if(det){if(w<768){det.style.gridTemplateColumns='1fr';det.style.gap='2rem';det.style.padding='1rem 2rem 3rem';}else{det.style.gridTemplateColumns='1fr 1fr';det.style.gap='5rem';det.style.padding='1rem 4rem 5rem';}}
   const rg=document.getElementById('relatedGrid');
-  if(w<900){dn.style.display='none';mb.style.display='block';}
-  else{dn.style.display='flex';mb.style.display='none';}
-  if(detail){
-    if(w<768){detail.style.gridTemplateColumns='1fr';detail.style.gap='2rem';}
-    else{detail.style.gridTemplateColumns='1fr 1fr';detail.style.gap='5rem';}
-  }
-  if(rg){
-    if(w<600)rg.style.gridTemplateColumns='repeat(2,1fr)';
-    else rg.style.gridTemplateColumns='repeat(4,1fr)';
-  }
+  if(rg)rg.style.gridTemplateColumns=w<600?'repeat(2,1fr)':'repeat(4,1fr)';
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  const params=new URLSearchParams(window.location.search);
-  const id=params.get('id');
+  const id=new URLSearchParams(window.location.search).get('id');
   const products=getProducts();
   const product=products.find(p=>p.id===id);
   if(!product){
-    document.getElementById('productDetail').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:5rem 0;"><p style="font-size:1.2rem;color:#747878;font-family:'Noto Serif',serif;margin-bottom:1.5rem;">Ürün bulunamadı.</p><a href="urunler.html" style="font-family:'Manrope',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#1C1C1C;color:#fff;padding:1rem 2.5rem;text-decoration:none;">Ürünlere Dön</a></div>`;
-    return;
+    document.getElementById('productDetail').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:5rem 0;"><p style="font-family:\'Noto Serif\',serif;font-size:1.2rem;color:#747878;margin-bottom:1.5rem;">Ürün bulunamadı.</p><a href="urunler.html" style="background:#1C1C1C;color:#fff;padding:1rem 2.5rem;font-family:\'Manrope\',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;">Ürünlere Dön</a></div>';return;
   }
-  renderProduct(product);
-  renderRelated(product);
-  updateBadge();
-  handleResize();
-  window.addEventListener('resize',handleResize);
+  renderProduct(product);renderRelated(product);updateBadge();
+  handleResize();window.addEventListener('resize',handleResize);
 });
 </script>
 </body>
